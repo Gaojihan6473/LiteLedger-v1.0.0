@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(start:*)",
+      "mcp__figma-remote-mcp__generate_figma_design",
+      "Bash(npm run lint)"
+    ]
+  }
+}
