@@ -23,6 +23,7 @@ export interface Channel {
   iconName: string;
   color?: string;
   sortOrder?: number;
+  balance?: number;
 }
 
 export interface TransactionRecord {
@@ -31,6 +32,7 @@ export interface TransactionRecord {
   categoryId: string;
   subCategoryId?: string;
   channelId?: string;
+  toChannelId?: string; // 转账目标渠道
   type: TransactionType;
   date: string;
   note?: string;

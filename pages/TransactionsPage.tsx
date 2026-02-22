@@ -79,6 +79,10 @@ export const TransactionsPage: React.FC = () => {
 
   const getCategory = (id: string) => categories.find(c => c.id === id);
   const getChannel = (id?: string) => channels.find(c => c.id === id);
+  const getSubCategory = (categoryId: string, subCategoryId?: string) => {
+    const category = getCategory(categoryId);
+    return category?.subCategories?.find(sc => sc.id === subCategoryId);
+  };
 
   const formatDateHeader = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -177,8 +181,9 @@ export const TransactionsPage: React.FC = () => {
                 {group.records.map((record, index) => {
                   const category = getCategory(record.categoryId);
                   const channel = getChannel(record.channelId);
+                  const subCategory = getSubCategory(record.categoryId, record.subCategoryId);
                   const isTransfer = record.type === 'transfer';
-                  const isTransferIn = isTransfer && record.subCategoryId === 'transfer_in';
+                  const isTransferIn = isTransfer && subCategory?.name === '转入';
 
                   return (
                     <div
@@ -202,7 +207,7 @@ export const TransactionsPage: React.FC = () => {
                         </div>
                         <span className="text-sm font-semibold text-slate-900">
                           {isTransfer
-                            ? (record.subCategoryId === 'transfer_in' ? '转入' : '转出')
+                            ? (subCategory?.name || '未知')
                             : (category?.name || '未知')}
                         </span>
                       </div>

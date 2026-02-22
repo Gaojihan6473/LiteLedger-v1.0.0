@@ -3,6 +3,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { Icon } from '../components/Icon';
 import { useStore } from '../store';
+import { useAuthStore } from '../store/authStore';
+import * as api from '../lib/api';
 import { Channel } from '../types';
 import {
   DndContext,
@@ -91,34 +93,74 @@ const SortableChannelCard: React.FC<{
 };
 
 export const SavingsPage: React.FC = () => {
-  const { records, channels, hasInitializedSavings, setHasInitializedSavings, addRecord, reorderChannels, getChannelBalance } = useStore();
+  const { records, channels, categories, hasInitializedSavings, setHasInitializedSavings, addRecord, reorderChannels, getChannelBalance, updateChannelBalances, initData } = useStore();
+  const { isAuthenticated } = useAuthStore();
   const [showInitModal, setShowInitModal] = useState(false);
   const [initialBalances, setInitialBalances] = useState<Record<string, string>>({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
 
+  // 检查是否需要从数据库刷新渠道数据
   useEffect(() => {
-    if (!hasInitializedSavings && channels.length > 0) {
+    const hasOldFormatChannels = channels.some(c => c.id.match(/^ch\d+$/));
+    if (isAuthenticated && hasOldFormatChannels) {
+      console.log('Detected old format channels, refreshing from database...');
+      initData();
+    }
+  }, [isAuthenticated]);
+
+  // 检查是否需要显示初始化弹窗
+  // 条件：已登录、渠道已加载、且所有渠道余额都为0或未设置
+  const needsInitialization = useMemo(() => {
+    if (!isAuthenticated) return false;
+    if (channels.length === 0) return false;
+
+    // 检查是否所有渠道都没有设置余额
+    const allZero = channels.every(c => {
+      const balance = getChannelBalance(c.id);
+      return balance === 0;
+    });
+    return allZero;
+  }, [isAuthenticated, channels, records, getChannelBalance]);
+
+  useEffect(() => {
+    if (needsInitialization) {
       setShowInitModal(true);
       const initial: Record<string, string> = {};
-      channels.forEach(c => initial[c.id] = '');
+      channels.forEach(c => initial[c.name] = '');
       setInitialBalances(initial);
     }
-  }, [hasInitializedSavings, channels]);
+  }, [needsInitialization, channels]);
 
   const handleInitSubmit = async () => {
     console.log('Initial balances:', initialBalances);
+    console.log('Channels:', channels);
     setIsInitializing(true);
     try {
-      const promises = Object.entries(initialBalances).map(([channelId, amountStr]) => {
+      const authState = useAuthStore.getState();
+      const userId = authState.currentUser?.id;
+
+      // 从当前分类中查找收入和支出分类
+      const incomeCategory = categories.find(c => c.type === 'income');
+      const expenseCategory = categories.find(c => c.type === 'expense');
+      const incomeSubCategory = incomeCategory?.subCategories?.[0];
+      const expenseSubCategory = expenseCategory?.subCategories?.[0];
+
+      if (!incomeCategory || !expenseCategory || !incomeSubCategory || !expenseSubCategory) {
+        throw new Error('分类数据未加载');
+      }
+
+      // 所有用户都使用交易记录方式初始化余额（保持一致性）
+      // 正数创建收入记录，负数创建支出记录
+      const promises = channels.map((channel) => {
+        const amountStr = initialBalances[channel.id] || initialBalances[channel.name] || '';
         const amount = parseFloat(amountStr as string);
-        console.log('Channel:', channelId, 'Amount:', amount);
         if (!isNaN(amount) && amount !== 0) {
           return addRecord({
             amount: Math.abs(amount),
-            categoryId: amount > 0 ? 'i7' : 'c16',
-            subCategoryId: amount > 0 ? 'i7_5' : 'c16_4',
-            channelId: channelId,
+            categoryId: amount > 0 ? incomeCategory.id : expenseCategory.id,
+            subCategoryId: amount > 0 ? incomeSubCategory.id : expenseSubCategory.id,
+            channelId: channel.id,
             type: amount > 0 ? 'income' : 'expense',
             date: new Date().toISOString(),
             note: '初始余额',
@@ -128,6 +170,7 @@ export const SavingsPage: React.FC = () => {
         return Promise.resolve();
       });
       await Promise.all(promises);
+
       setHasInitializedSavings(true);
       setShowInitModal(false);
     } catch (error) {
@@ -138,6 +181,7 @@ export const SavingsPage: React.FC = () => {
     }
   };
 
+  // 始终从交易记录计算余额，确保实时更新
   const channelBalances = useMemo(() => {
     const balances = new Map<string, number>();
     channels.forEach(c => {
@@ -282,8 +326,8 @@ export const SavingsPage: React.FC = () => {
                         <input
                           type="number"
                           placeholder="0.00"
-                          value={initialBalances[channel.id] || ''}
-                          onChange={(e) => setInitialBalances(prev => ({ ...prev, [channel.id]: e.target.value }))}
+                          value={initialBalances[channel.name] || ''}
+                          onChange={(e) => setInitialBalances(prev => ({ ...prev, [channel.name]: e.target.value }))}
                           className="w-full pl-6 pr-2 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>

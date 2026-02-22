@@ -234,11 +234,22 @@ export const EntryPage: React.FC = () => {
         const fromChannelName = channels.find(c => c.id === fromChannelId)?.name || '';
         const toChannelName = channels.find(c => c.id === toChannelId)?.name || '';
 
+        // 从用户分类中查找转账分类
+        const transferCategory = categories.find(c => c.type === 'transfer');
+        const transferInSub = transferCategory?.subCategories?.find(sc => sc.name === '转入');
+        const transferOutSub = transferCategory?.subCategories?.find(sc => sc.name === '转出');
+
+        if (!transferCategory || !transferInSub || !transferOutSub) {
+          alert('转账分类未加载，请稍后重试');
+          setIsSubmitting(false);
+          return;
+        }
+
         // 创建转出记录 - 存储为负数（支出）
         await addRecord({
           amount: -transferAmount,
-          categoryId: 'transfer',
-          subCategoryId: 'transfer_out',
+          categoryId: transferCategory.id,
+          subCategoryId: transferOutSub.id,
           channelId: fromChannelId,
           type: 'transfer',
           date: new Date(date).toISOString(),
@@ -248,8 +259,8 @@ export const EntryPage: React.FC = () => {
         // 创建转入记录 - 存储为正数（收入）
         await addRecord({
           amount: transferAmount,
-          categoryId: 'transfer',
-          subCategoryId: 'transfer_in',
+          categoryId: transferCategory.id,
+          subCategoryId: transferInSub.id,
           channelId: toChannelId,
           type: 'transfer',
           date: new Date(date).toISOString(),

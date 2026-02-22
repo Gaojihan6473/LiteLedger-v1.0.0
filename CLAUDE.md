@@ -4,7 +4,7 @@
 
 ## 项目简介
 
-LiteLedger（轻账）是一个个人记账移动优先的 Web 应用，基于 React + Vite + TypeScript 构建。用户可以记录支出和收入、查看交易历史、分析消费统计、追踪储蓄目标，以及在日历视图中查看交易记录。
+LiteLedger（轻账）是一个个人记账移动优先的 Web 应用，基于 React + Vite + TypeScript + Supabase 构建。用户可以记录支出和收入、查看交易历史、分析消费统计、追踪储蓄目标，以及在日历视图中查看交易记录。支持多设备实时同步。
 
 ## 命令
 
@@ -16,62 +16,89 @@ npm run preview   # 预览生产构建
 npm run lint      # TypeScript 类型检查
 ```
 
+## 环境变量
+
+项目需要以下 Supabase 环境变量（配置在 `.env` 文件中）：
+- `VITE_SUPABASE_URL` - Supabase 项目 URL
+- `VITE_SUPABASE_ANON_KEY` - Supabase anon key
+
 ## 设计特点
 
 - **移动优先**: 桌面端使用侧边栏导航，移动端使用底部导航栏
-- **数据持久化**: 所有数据存储在浏览器 localStorage 中，键名为 `lite-ledger-storage`
+- **云端数据持久化**: 所有数据存储在 Supabase PostgreSQL 数据库中
+- **实时同步**: 使用 Supabase Realtime 实现多设备数据同步
 
 ## 架构
 
 ### 技术栈
 - **框架**: React 19 + Vite 6
 - **语言**: TypeScript
+- **后端**: Supabase (PostgreSQL + Auth + Realtime)
 - **路由**: react-router-dom（HashRouter - 使用 `#/path` 格式 URL）
-- **状态管理**: Zustand + localStorage 持久化（键名: `lite-ledger-storage`）
+- **状态管理**: Zustand（数据存储在内存，通过 Supabase 持久化）
 - **样式**: Tailwind CSS v4（使用 `@tailwindcss/vite` 插件）
 - **图标**: lucide-react
 - **图表**: recharts
 - **日期处理**: date-fns（用于日期格式化和日历功能）
 - **拖拽排序**: @dnd-kit/core + @dnd-kit/sortable（用于 EntryPage 分类拖拽排序）
 
+### 数据层
+
+#### 数据库表（lib/supabase.ts）
+- `profiles` - 用户资料
+- `categories` - 支出/收入分类（包含 `user_id` 隔离）
+- `sub_categories` - 二级分类（通过 `category_id` 外键关联）
+- `channels` - 支付渠道（含余额）
+- `transactions` - 交易记录
+
+#### API 层（lib/api.ts）
+所有数据库操作通过 API 层：
+- `fetchCategories()`, `addCategory()`, `deleteCategory()`, `reorderCategoriesDb()`
+- `addSubCategory()`, `deleteSubCategory()`
+- `fetchChannels()`, `addChannel()`, `updateChannelBalance()`, `batchUpdateChannelBalances()`
+- `fetchTransactions()`, `addTransaction()`, `updateTransaction()`, `deleteTransaction()`
+- `initDefaultData()` - 首次登录时初始化默认分类和渠道
+- 认证相关: `signUp()`, `signIn()`, `signOut()`, `resetPassword()`, `updateUserPassword()`
+
+#### 实时订阅（lib/realtime.ts）
+- `subscribeToTransactions()` - 监听交易 INSERT/UPDATE/DELETE
+- `subscribeToCategories()` - 监听分类变化
+- `subscribeToChannels()` - 监听渠道变化
+- 所有订阅按 `user_id` 过滤，确保数据隔离
+
 ### 状态管理
-应用使用 [store.ts](store.ts) 中的 Zustand store，配合 `persist` 中间件。数据存储在 localStorage 中，键名为 `lite-ledger-storage`。
+
+#### 主数据 Store（store.ts）
+使用 Zustand，通过 `lib/api.ts` 与 Supabase 通信。
 
 核心状态：
-- `records`: TransactionRecord[] - 所有交易记录
 - `categories`: Category[] - 支出/收入分类及子分类
-- `channels`: Channel[] - 支付渠道（微信、支付宝、银行、现金等）
+- `channels`: Channel[] - 支付渠道
+- `records`: TransactionRecord[] - 交易记录
 - `hasInitializedSavings`: boolean - 追踪储蓄目标初始化状态
+- `isLoading`, `isSyncing`, `error` - 加载状态
 
-核心方法：
-- `addRecord()` - 添加交易记录
-- `deleteRecord()` - 删除交易记录
-- `updateRecord()` - 更新交易记录
-- `getCategory()` - 获取分类详情
-- `getChannel()` - 获取渠道详情
+核心方法（所有方法先更新 Supabase，成功后更新本地状态）：
+- `initData()` - 从 Supabase 加载数据并设置实时订阅
+- `addRecord()`, `deleteRecord()`, `updateRecord()` - 交易记录操作
+- `addCategory()`, `deleteCategory()`, `deleteSubCategory()` - 分类操作
+- `addChannel()`, `deleteChannel()`, `reorderChannels()` - 渠道操作
 - `getChannelBalance()` - 计算渠道余额
-- `clearAllData()` - 清除所有数据
-- `addCategory()` - 添加自定义分类
-- `deleteCategory()` - 删除分类
-- `deleteSubCategory()` - 删除子分类
-- `reorderCategories()` - 分类排序（按支出/收入类型）
-- `reorderChannels()` - 支付渠道排序
+- `cleanup()` - 清理实时订阅
 
-### 认证存储
-应用使用独立的 [store/authStore.ts](store/authStore.ts)，数据存储在 localStorage 中，键名为 `lite-ledger-auth`。
+#### 认证 Store（store/authStore.ts）
+使用 Supabase Auth，auth 状态持久化到 localStorage（键名: `lite-ledger-auth`）。
 
 核心状态：
 - `currentUser`: User | null - 当前登录用户
 - `isAuthenticated`: boolean - 是否已登录
 
 核心方法：
-- `login()` - 登录验证
-- `register()` - 注册新用户
+- `login()` - 邮箱或用户名登录
+- `register()` - 注册新用户（自动初始化默认数据）
 - `logout()` - 退出登录
-- `sendVerificationCode()` - 发送验证码（本地生成 6 位数字）
-- `resetPassword()` - 重置密码
-
-验证码存储在 localStorage 中（键名: `lite-ledger-verification-code`），有效期 5 分钟，开发环境会打印到控制台。
+- `resetPassword()` - 邮箱重置密码
+- `checkAuth()` - 应用加载时同步认证状态
 
 ### 路由
 | 路径 | 页面 | 描述 |
@@ -96,8 +123,11 @@ npm run lint      # TypeScript 类型检查
 - [types.ts](types.ts) - TransactionRecord、Category、Channel 等 TypeScript 接口定义
 - [types/auth.ts](types/auth.ts) - 认证相关类型（User、VerificationCode、VALIDATION_RULES）
 - [constants.ts](constants.ts) - 默认分类（16 个支出 + 7 个收入）、渠道及颜色常量
-- [store.ts](store.ts) - 数据 Zustand store（交易记录、分类、渠道）
-- [store/authStore.ts](store/authStore.ts) - 认证 Zustand store（登录、注册、登出）
+- [store.ts](store.ts) - 数据 Zustand store（调用 Supabase API）
+- [store/authStore.ts](store/authStore.ts) - 认证 Zustand store（Supabase Auth）
+- [lib/supabase.ts](lib/supabase.ts) - Supabase 客户端、数据库类型定义、数据转换函数
+- [lib/api.ts](lib/api.ts) - 所有数据库 CRUD 操作
+- [lib/realtime.ts](lib/realtime.ts) - Supabase Realtime 订阅
 - [index.tsx](index.tsx) - 应用入口点
 - [index.css](index.css) - 全局样式（Tailwind CSS v4 入口）
 - [App.tsx](App.tsx) - 应用根组件，包含路由配置和路由守卫
@@ -116,13 +146,13 @@ npm run lint      # TypeScript 类型检查
 - `components/SelectPicker.tsx` - 下拉选择器
 
 ### 页面
-- `pages/EntryPage.tsx` - 快速记账首页，支持支出/收入类型切换、分类选择、金额输入、日期选择、支付渠道选择、备注添加；支持分类拖拽排序
+- `pages/EntryPage.tsx` - 快速记账首页，支持支出/收入/转账类型切换、分类选择、金额输入、日期选择、支付渠道选择、备注添加；支持分类拖拽排序
 - `pages/TransactionsPage.tsx` - 交易明细列表（按日分组显示）
 - `pages/StatsPage.tsx` - 收支统计图表（饼图、折线图）
 - `pages/SavingsPage.tsx` - 储蓄目标追踪
 - `pages/CalendarPage.tsx` - 日历视图（按月查看每日收支）
 - `pages/SettingsPage.tsx` - 应用设置（含退出登录、清空数据、主题切换）
-- `pages/LoginPage.tsx` - 登录页面
+- `pages/LoginPage.tsx` - 登录页面（支持邮箱/用户名登录）
 - `pages/RegisterPage.tsx` - 注册页面
 - `pages/ForgotPasswordPage.tsx` - 忘记密码页面（两步流程：邮箱验证→重置密码）
 - `pages/UserAgreementPage.tsx` - 用户协议页面
@@ -172,6 +202,7 @@ interface Channel {
   name: string;
   iconName: string;
   color?: string;
+  balance: number;
 }
 
 // 日分组（用于交易列表）
@@ -196,15 +227,6 @@ interface User {
   id: string;
   username: string;
   email: string;
-  password: string;
   createdAt: number;
 }
-
-// 验证码
-interface VerificationCode {
-  email: string;
-  code: string;
-  expiresAt: number;
-}
 ```
-

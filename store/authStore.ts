@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User, AuthState } from '../types/auth';
 import { getCurrentUser, signUp, signIn, signOut, resetPassword, onAuthStateChange, initDefaultData, getEmailByUsername } from '../lib/api';
+import { useStore } from '../store';
 
 const STORAGE_KEY = 'lite-ledger-auth';
 
@@ -56,9 +57,11 @@ export const useAuthStore = create<AuthState>()(
             if (user) {
               // 初始化默认数据
               await initDefaultData(user.id);
+              set({ isAuthenticated: true, currentUser: user });
+              return { success: true };
             }
-            set({ isAuthenticated: true, currentUser: user });
-            return { success: true };
+            // 如果无法获取用户信息，返回失败
+            return { success: false, error: '已注册成功，请回到登录页面进行登录' };
           }
 
           return { success: false, error: '注册失败' };
@@ -69,14 +72,25 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: async () => {
+        // 设置标志位，防止 onAuthStateChange 中的 SIGNED_OUT 触发无限循环
+        isSigningOut = true;
+
         // 先同步清除本地状态，确保UI立即响应
         set({ isAuthenticated: false, currentUser: null });
+
+        // 取消 Realtime 订阅
+        useStore.getState().cleanup();
 
         try {
           await signOut();
         } catch (error: any) {
           console.error('Logout error:', error);
           // API 失败不影响本地状态（已清除）
+        } finally {
+          // 延迟重置标志位，确保 Supabase 的 SIGNED_OUT 事件不会被处理
+          setTimeout(() => {
+            isSigningOut = false;
+          }, 1000);
         }
       },
 
@@ -97,7 +111,30 @@ export const useAuthStore = create<AuthState>()(
       },
 
       checkAuth: async () => {
-        const { currentUser } = get();
+        const state = get();
+        const { currentUser, isAuthenticated } = state;
+
+        // 如果 isAuthenticated 为 true 但 currentUser 为 null，说明状态不一致，需要重新检查
+        if (isAuthenticated && !currentUser) {
+          console.log('Inconsistent state detected, checking Supabase...');
+          try {
+            const user = await getCurrentUser();
+            if (user) {
+              set({ isAuthenticated: true, currentUser: user });
+              await initDefaultData(user.id);
+              return true;
+            }
+            // Supabase 会话已过期，清除本地状态
+            console.log('Session expired, clearing auth state');
+            set({ isAuthenticated: false, currentUser: null });
+            return false;
+          } catch (error) {
+            console.error('Check auth error:', error);
+            // 网络错误时清除状态，让用户重新登录
+            set({ isAuthenticated: false, currentUser: null });
+            return false;
+          }
+        }
 
         // 如果本地已有用户信息，先设置为已登录
         if (currentUser) {
@@ -149,16 +186,26 @@ export const useAuthStore = create<AuthState>()(
 
 // 监听 Supabase 认证状态变化
 let logoutPromise: Promise<void> | null = null;
+let isSigningOut = false; // 标志位：防止 onAuthStateChange 中的 SIGNED_OUT 触发无限循环
+
 onAuthStateChange(async (event, session) => {
   // 如果正在处理登出，等待完成后再处理，避免竞态条件
   if (logoutPromise) {
     await logoutPromise;
   }
 
+  // 如果是本地触发的登出操作，不重复处理
+  if (isSigningOut) {
+    return;
+  }
+
   if (event === 'SIGNED_OUT') {
     // 创建登出 promise，确保在 signOut 完成前阻止其他操作
+    // 注意：这里只清除本地状态，不再调用 logout() 避免无限循环
     logoutPromise = (async () => {
-      await useAuthStore.getState().logout();
+      // 直接清除本地状态，不调用 signOut() 避免循环
+      useStore.getState().cleanup();
+      set({ isAuthenticated: false, currentUser: null });
     })();
     await logoutPromise;
     logoutPromise = null;

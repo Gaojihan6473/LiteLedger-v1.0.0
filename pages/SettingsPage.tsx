@@ -13,8 +13,8 @@ export const SettingsPage: React.FC = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  const handleClearData = () => {
-    clearAllData();
+  const handleClearData = async () => {
+    await clearAllData();
     setShowClearConfirm(false);
   };
 

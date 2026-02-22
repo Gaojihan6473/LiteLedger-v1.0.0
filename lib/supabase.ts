@@ -47,6 +47,7 @@ export interface DbChannel {
   icon_name: string;
   color?: string;
   sort_order: number;
+  balance: number;
   created_at: string;
   updated_at: string;
 }
@@ -58,6 +59,7 @@ export interface DbTransaction {
   category_id?: string;
   sub_category_id?: string;
   channel_id?: string;
+  to_channel_id?: string;
   type: 'expense' | 'income' | 'transfer';
   date: string;
   note?: string;
@@ -97,6 +99,7 @@ export const convertDbChannelToChannel = (db: DbChannel): any => ({
   iconName: db.icon_name,
   color: db.color,
   sortOrder: db.sort_order,
+  balance: db.balance,
 });
 
 export const convertChannelToDb = (channel: any, userId: string): Partial<DbChannel> => ({
@@ -105,6 +108,7 @@ export const convertChannelToDb = (channel: any, userId: string): Partial<DbChan
   icon_name: channel.iconName,
   color: channel.color,
   sort_order: channel.sortOrder || 0,
+  balance: channel.balance ?? 0,
 });
 
 export const convertDbTransactionToRecord = (db: DbTransaction): any => ({
@@ -113,6 +117,7 @@ export const convertDbTransactionToRecord = (db: DbTransaction): any => ({
   categoryId: db.category_id,
   subCategoryId: db.sub_category_id,
   channelId: db.channel_id,
+  toChannelId: db.to_channel_id,
   type: db.type,
   date: db.date,
   note: db.note,
@@ -126,6 +131,7 @@ export const convertRecordToDb = (record: any, userId: string): Partial<DbTransa
   category_id: record.categoryId,
   sub_category_id: record.subCategoryId,
   channel_id: record.channelId,
+  to_channel_id: record.toChannelId,
   type: record.type,
   date: record.date.split('T')[0],
   note: record.note,
