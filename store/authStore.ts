@@ -205,7 +205,7 @@ onAuthStateChange(async (event, session) => {
     logoutPromise = (async () => {
       // 直接清除本地状态，不调用 signOut() 避免循环
       useStore.getState().cleanup();
-      set({ isAuthenticated: false, currentUser: null });
+      useAuthStore.setState({ isAuthenticated: false, currentUser: null });
     })();
     await logoutPromise;
     logoutPromise = null;

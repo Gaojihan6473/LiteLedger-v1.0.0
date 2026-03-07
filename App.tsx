@@ -12,6 +12,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { UserAgreementPage } from './pages/UserAgreementPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { ScrollToTop } from './components/ScrollToTop';
 import { useAuthStore } from './store/authStore';
 import { useStore } from './store';
 
@@ -58,6 +59,7 @@ const App: React.FC = () => {
 
   return (
     <HashRouter>
+      <ScrollToTop />
       <Routes>
         {/* 公开路由 */}
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />

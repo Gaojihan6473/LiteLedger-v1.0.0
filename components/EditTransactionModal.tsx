@@ -27,6 +27,9 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 }) => {
   const { categories, channels, updateRecord } = useStore();
 
+  // Toast 状态
+  const [showToast, setShowToast] = useState(false);
+
   // 表单状态
   const [type, setType] = useState<TransactionType>(record.type);
   const [amount, setAmount] = useState(record.amount.toString());
@@ -98,7 +101,12 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         channelId,
         note: note || undefined,
       });
-      onSuccess();
+      // 显示编辑成功 toast，延迟关闭弹窗以便 toast 可见
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        onSuccess();
+      }, 1500);
     } catch (error) {
       console.error('Update error:', error);
       alert('保存失败: ' + (error as Error).message);
@@ -337,6 +345,16 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         onConfirm={() => onDelete()}
         onCancel={() => setShowDeleteConfirm(false)}
       />
+
+      {/* Toast Notification */}
+      <div className={`fixed top-6 right-6 md:left-auto md:-translate-x-0 bg-white border border-slate-100 text-slate-900 px-4 py-3 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-2 z-[60] transform ${showToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
+        <div className="bg-green-500 rounded-full p-1 shadow-lg shadow-green-200">
+          <Icon name="Check" size={14} className="text-white" />
+        </div>
+        <div>
+          <h4 className="font-bold text-xs">编辑成功</h4>
+        </div>
+      </div>
     </div>
   );
 };

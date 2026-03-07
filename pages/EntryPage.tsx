@@ -358,7 +358,7 @@ export const EntryPage: React.FC = () => {
 
   return (
     <Layout activeTab="entry" title="记账">
-      <div className="max-w-6xl mx-auto h-[calc(100vh-6rem)] flex flex-col">
+      <div className="max-w-6xl mx-auto md:h-[calc(100vh-6rem)] flex flex-col pb-6 md:pb-0">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full">
           
           {/* Left Panel: Inputs */}

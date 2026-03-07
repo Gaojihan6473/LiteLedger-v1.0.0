@@ -229,7 +229,7 @@ export const SavingsPage: React.FC = () => {
 
   return (
     <Layout activeTab="savings" title="储蓄目标">
-      <div className="max-w-6xl mx-auto relative">
+      <div className="max-w-6xl mx-auto relative pb-6">
 
         {/* Total Assets Card */}
         <div className="rounded-2xl p-4 md:p-6 text-white shadow-lg mb-6" style={{ backgroundColor: '#0284C7' }}>
