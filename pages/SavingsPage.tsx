@@ -65,26 +65,26 @@ const SortableChannelCard: React.FC<{
       style={style}
       {...(isEditMode ? attributes : {})}
       {...(isEditMode ? listeners : {})}
-      className={`bg-white rounded-xl p-4 border transition-all duration-200 touch-none ${
+      className={`bg-white rounded-xl p-3 border transition-all duration-200 ${isEditMode ? 'touch-none' : ''} ${
         isEditMode
           ? 'border-blue-300 shadow-md hover:shadow-lg cursor-grab active:cursor-grabbing'
           : 'border-slate-100 shadow-sm hover:shadow-md'
       } ${isDragging ? 'z-50' : ''}`}
     >
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-center gap-1.5 mb-1">
         <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
           style={{ backgroundColor: channel.color }}
         >
-          <Icon name={channel.iconName as any} size={20} />
+          <Icon name={channel.iconName as any} size={14} />
         </div>
         <div className="min-w-0">
-          <h3 className="font-bold text-slate-900 text-sm truncate">{channel.name}</h3>
+          <h3 className="font-bold text-slate-900 text-xs truncate">{channel.name}</h3>
         </div>
       </div>
       <div>
-        <span className="text-slate-400 text-xs">余额</span>
-        <div className={`text-xl font-bold ${balance < 0 ? 'text-red-500' : 'text-slate-900'}`}>
+        <span className="text-slate-400 text-[10px]">余额</span>
+        <div className={`text-base font-bold ${balance < 0 ? 'text-red-500' : 'text-slate-900'}`}>
           ¥{formatCurrency(balance)}
         </div>
       </div>
@@ -199,11 +199,11 @@ export const SavingsPage: React.FC = () => {
     }).format(amount);
   };
 
-  // dnd-kit sensors
+  // dnd-kit sensors - 只在编辑模式下激活 PointerSensor，非编辑模式使用很大的 distance 使其无法触发
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5,
+        distance: isEditMode ? 5 : 9999,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -228,14 +228,13 @@ export const SavingsPage: React.FC = () => {
   };
 
   return (
-    <Layout activeTab="savings">
+    <Layout activeTab="savings" title="储蓄目标">
       <div className="max-w-6xl mx-auto relative">
-        <h1 className="text-2xl font-bold text-slate-900 mb-6">我的存款</h1>
 
         {/* Total Assets Card */}
-        <div className="rounded-2xl p-8 text-white shadow-lg mb-8" style={{ backgroundColor: '#0284C7' }}>
-          <span className="text-white text-sm font-medium uppercase tracking-wider">总资产</span>
-          <div className="text-5xl font-bold mt-2">
+        <div className="rounded-2xl p-4 md:p-6 text-white shadow-lg mb-6" style={{ backgroundColor: '#0284C7' }}>
+          <span className="text-white text-xs md:text-sm font-medium uppercase tracking-wider">总资产</span>
+          <div className="text-2xl md:text-4xl font-bold mt-1 md:mt-2">
             ¥{formatCurrency(totalAssets)}
           </div>
         </div>
@@ -257,10 +256,10 @@ export const SavingsPage: React.FC = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={channels.map(c => c.id)}
+            items={isEditMode ? channels.map(c => c.id) : []}
             strategy={rectSortingStrategy}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {channels.map((channel) => {
                 const balance = channelBalances.get(channel.id) || 0;
                 const isDragging = activeId === channel.id;
@@ -278,21 +277,21 @@ export const SavingsPage: React.FC = () => {
           </SortableContext>
           <DragOverlay>
             {activeId ? (
-              <div className="bg-white rounded-xl p-4 border-2 border-blue-500">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="bg-white rounded-xl p-3 border-2 border-blue-500">
+                <div className="flex items-center gap-1.5 mb-1">
                   <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
                     style={{ backgroundColor: channels.find(c => c.id === activeId)?.color }}
                   >
-                    <Icon name={channels.find(c => c.id === activeId)?.iconName as any} size={20} />
+                    <Icon name={channels.find(c => c.id === activeId)?.iconName as any} size={14} />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-bold text-slate-900 text-sm truncate">{channels.find(c => c.id === activeId)?.name}</h3>
-                            </div>
+                    <h3 className="font-bold text-slate-900 text-xs truncate">{channels.find(c => c.id === activeId)?.name}</h3>
+                  </div>
                 </div>
                 <div>
-                  <span className="text-slate-400 text-xs">余额</span>
-                  <div className={`text-xl font-bold ${(channelBalances.get(activeId) || 0) < 0 ? 'text-red-500' : 'text-slate-900'}`}>
+                  <span className="text-slate-400 text-[10px]">余额</span>
+                  <div className={`text-base font-bold ${(channelBalances.get(activeId) || 0) < 0 ? 'text-red-500' : 'text-slate-900'}`}>
                     ¥{formatCurrency(channelBalances.get(activeId) || 0)}
                   </div>
                 </div>

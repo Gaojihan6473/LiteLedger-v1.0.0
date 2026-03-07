@@ -109,7 +109,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
       {/* 触发按钮 */}
       <button
         onClick={handleOpen}
-        className="w-full h-10 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
+        className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
       >
         <div className="flex items-center gap-2">
           <Icon name="Calendar" size={16} className="text-slate-400" />

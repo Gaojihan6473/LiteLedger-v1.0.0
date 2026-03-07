@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { Button } from '../components/Button';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Icon } from '../components/Icon';
 import { useStore } from '../store';
 import { useAuthStore } from '../store/authStore';
 
@@ -34,7 +35,7 @@ export const SettingsPage: React.FC = () => {
   };
 
   return (
-    <Layout activeTab="settings">
+    <Layout activeTab="settings" title="设置">
       <ConfirmDialog
         isOpen={showLogoutConfirm}
         title="退出登录"
@@ -58,8 +59,6 @@ export const SettingsPage: React.FC = () => {
       />
 
       <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-slate-900 mb-6">设置</h1>
-
         {/* 账户信息 - macOS 风格分组 */}
         {currentUser && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
@@ -67,7 +66,7 @@ export const SettingsPage: React.FC = () => {
               <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">账户</span>
             </div>
             <div className="p-4">
-              <div className="flex items-center justify-between py-1">
+              <div className="flex items-center justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <p className="text-lg font-medium text-slate-900">{currentUser.username}</p>
                   <p className="text-sm text-slate-500 truncate">{currentUser.email}</p>
@@ -76,7 +75,7 @@ export const SettingsPage: React.FC = () => {
                   variant="secondary"
                   size="sm"
                   onClick={() => setShowLogoutConfirm(true)}
-                  className="shrink-0 ml-4"
+                  className="shrink-0 self-center"
                 >
                   退出登录
                 </Button>
@@ -84,6 +83,8 @@ export const SettingsPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* 退出登录 - 已移至账户卡片内 */}
 
         {/* 数据管理 */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">

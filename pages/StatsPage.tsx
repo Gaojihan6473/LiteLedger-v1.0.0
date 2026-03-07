@@ -277,12 +277,9 @@ export const StatsPage: React.FC = () => {
   );
 
   return (
-    <Layout activeTab="stats">
+    <Layout activeTab="stats" title="消费统计">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-           <h1 className="text-2xl font-bold text-slate-900">
-             收支概览
-           </h1>
            
            <div className="flex items-center gap-3 bg-white p-1 rounded-xl border border-slate-200 shadow-sm self-start sm:self-auto">
              <div className="flex items-center gap-2 px-2">
@@ -319,28 +316,32 @@ export const StatsPage: React.FC = () => {
         </div>
         
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-slate-600 rounded-2xl p-6 text-white shadow-lg">
-            <span className="text-white text-base font-medium uppercase tracking-wider">总支出</span>
-            <div className="text-4xl font-bold mt-2">
-              ¥{statsData.totalExpense.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
-          </div>
-
-          <div className="rounded-2xl p-6 text-white shadow-lg" style={{ backgroundColor: '#16A34A' }}>
-            <span className="text-white text-base font-medium uppercase tracking-wider">总收入</span>
-            <div className="text-4xl font-bold mt-2">
-              ¥{statsData.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
-          </div>
-
+        <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6 mb-8">
+          {/* 净收入 - 移动端单独一行突出显示 */}
           <div
-            className="rounded-2xl p-6 text-white shadow-lg"
+            className="md:col-start-2 md:row-start-1 rounded-2xl p-4 md:p-6 text-white shadow-lg"
             style={{ backgroundColor: '#0284C7' }}
           >
-            <span className="text-white text-base font-medium uppercase tracking-wider">净收入</span>
-            <div className="text-4xl font-bold mt-2">
+            <span className="text-white text-xs md:text-base font-medium uppercase tracking-wider">净收入</span>
+            <div className="text-2xl md:text-4xl font-bold mt-1 md:mt-2">
               ¥{statsData.netIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+          </div>
+
+          {/* 第二行：总支出和总收入 */}
+          <div className="grid grid-cols-2 gap-3 md:contents">
+            <div className="bg-slate-600 rounded-2xl p-4 md:p-6 text-white shadow-lg col-span-1">
+              <span className="text-white text-xs md:text-base font-medium uppercase tracking-wider">总支出</span>
+              <div className="text-xl md:text-4xl font-bold mt-1 md:mt-2">
+                ¥{statsData.totalExpense.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </div>
+            </div>
+
+            <div className="rounded-2xl p-4 md:p-6 text-white shadow-lg col-span-1" style={{ backgroundColor: '#16A34A' }}>
+              <span className="text-white text-xs md:text-base font-medium uppercase tracking-wider">总收入</span>
+              <div className="text-xl md:text-4xl font-bold mt-1 md:mt-2">
+                ¥{statsData.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </div>
             </div>
           </div>
         </div>

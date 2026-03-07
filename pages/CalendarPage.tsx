@@ -146,9 +146,8 @@ export const CalendarPage: React.FC = () => {
   }, [records, currentDate]);
 
   return (
-    <Layout activeTab="calendar">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold text-slate-900 mb-6">收支日历</h1>
+    <Layout activeTab="calendar" title="日历">
+      <div className="max-w-6xl mx-auto mt-4 md:mt-6">
 
         {/* Calendar Container */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
@@ -198,26 +197,26 @@ export const CalendarPage: React.FC = () => {
                 <div
                   key={day.toString()}
                   className={`
-                    min-h-[90px] p-2 border-b border-r border-slate-100 relative
+                    min-h-[68px] md:min-h-[90px] p-1 md:p-2 border-b border-r border-slate-100 relative
                     ${!isCurrentMonth ? 'bg-slate-50/30' : 'bg-white'}
                     ${idx % 7 === 6 ? 'border-r-0' : ''}
                     ${isToday ? 'bg-blue-50/50' : ''}
                   `}
                 >
                   {/* 顶部：日期数字 + 节日/节气 */}
-                  <div className="flex items-start justify-between mb-1">
-                    {/* 日期数字 - 更大更醒目 */}
+                  <div className="flex items-start justify-between mb-0.5 md:mb-1">
+                    {/* 日期数字 - 移动端更小 */}
                     <div className={`
-                      text-sm font-semibold flex items-center justify-center w-7 h-7 rounded-lg shrink-0
+                      text-xs md:text-sm font-semibold flex items-center justify-center w-5 h-5 md:w-7 md:h-7 rounded-md md:rounded-lg shrink-0
                       ${isToday ? 'bg-blue-600 text-white shadow-md shadow-blue-200' : !isCurrentMonth ? 'text-slate-300' : isWeekend ? 'text-red-500' : 'text-slate-700'}
                     `}>
                       {format(day, 'd')}
                     </div>
 
-                    {/* 节日/节气 - 用简约边框包起来 */}
+                    {/* 节日/节气 - 右侧，与日期数字对齐 */}
                     {(festival || solarTerm) && isCurrentMonth && (
                       <div className={`
-                        text-[10px] font-medium px-1.5 py-0.5 rounded-md border shrink-0 ml-1
+                        text-[6px] md:text-[8px] font-medium px-0.5 py-px rounded border leading-tight shrink-0
                         ${festival?.type === 'holiday' ? 'border-red-200 bg-red-50 text-red-600' :
                           festival?.type === 'festival' ? 'border-orange-200 bg-orange-50 text-orange-600' :
                           'border-emerald-200 bg-emerald-50 text-emerald-600'}
@@ -227,16 +226,16 @@ export const CalendarPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* 金额显示 - 更大更醒目 */}
+                  {/* 金额显示 */}
                   {dayData && (
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-px">
                       {dayData.expense > 0 && (
-                        <div className="text-xs font-semibold text-slate-700 truncate bg-slate-100/80 px-1 py-0.5 rounded">
+                        <div className="text-[9px] md:text-xs font-semibold text-slate-700 truncate bg-slate-100/80 px-0.5 py-0.5 rounded leading-tight">
                           -{formatCurrency(dayData.expense)}
                         </div>
                       )}
                       {dayData.income > 0 && (
-                        <div className="text-xs font-semibold text-emerald-600 truncate bg-emerald-50/80 px-1 py-0.5 rounded">
+                        <div className="text-[9px] md:text-xs font-semibold text-emerald-600 truncate bg-emerald-50/80 px-0.5 py-0.5 rounded leading-tight">
                           +{formatCurrency(dayData.income)}
                         </div>
                       )}

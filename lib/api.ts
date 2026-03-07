@@ -126,22 +126,6 @@ export const addCategory = async (userId: string, category: Omit<Category, 'id'>
   return convertDbCategoryToCategory(data);
 };
 
-export const updateCategory = async (id: string, updates: Partial<Category>) => {
-  const dbUpdates: any = { ...updates };
-  if (updates.name) dbUpdates.name = updates.name;
-  if (updates.iconName) dbUpdates.icon_name = updates.iconName;
-  if (updates.color) dbUpdates.color = updates.color;
-  if (updates.sortOrder !== undefined) dbUpdates.sort_order = updates.sortOrder;
-  dbUpdates.updated_at = new Date().toISOString();
-
-  const { error } = await supabase
-    .from('categories')
-    .update(dbUpdates)
-    .eq('id', id);
-
-  if (error) throw error;
-};
-
 export const deleteCategory = async (id: string) => {
   const { error } = await supabase
     .from('categories')
@@ -232,22 +216,6 @@ export const addChannel = async (userId: string, channel: Omit<Channel, 'id'>, i
 
   if (error) throw error;
   return convertDbChannelToChannel(data);
-};
-
-export const updateChannel = async (id: string, updates: Partial<Channel>) => {
-  const dbUpdates: any = { ...updates };
-  if (updates.name) dbUpdates.name = updates.name;
-  if (updates.iconName) dbUpdates.icon_name = updates.iconName;
-  if (updates.color) dbUpdates.color = updates.color;
-  if (updates.sortOrder !== undefined) dbUpdates.sort_order = updates.sortOrder;
-  dbUpdates.updated_at = new Date().toISOString();
-
-  const { error } = await supabase
-    .from('channels')
-    .update(dbUpdates)
-    .eq('id', id);
-
-  if (error) throw error;
 };
 
 export const updateChannelBalance = async (channelId: string, newBalance: number) => {
@@ -388,11 +356,17 @@ export const addTransaction = async (userId: string, record: Omit<TransactionRec
 };
 
 export const updateTransaction = async (id: string, updates: Partial<TransactionRecord>) => {
-  const dbUpdates: any = { ...updates };
+  const dbUpdates: any = {};
   if (updates.amount !== undefined) dbUpdates.amount = updates.amount;
-  if (updates.categoryId !== undefined) dbUpdates.category_id = updates.categoryId;
-  if (updates.subCategoryId !== undefined) dbUpdates.sub_category_id = updates.subCategoryId;
-  if (updates.channelId !== undefined) dbUpdates.channel_id = updates.channelId;
+  if (updates.categoryId !== undefined) {
+    dbUpdates.category_id = updates.categoryId;
+  }
+  if (updates.subCategoryId !== undefined) {
+    dbUpdates.sub_category_id = updates.subCategoryId;
+  }
+  if (updates.channelId !== undefined) {
+    dbUpdates.channel_id = updates.channelId;
+  }
   if (updates.type !== undefined) dbUpdates.type = updates.type;
   if (updates.date !== undefined) dbUpdates.date = updates.date.split('T')[0];
   if (updates.note !== undefined) dbUpdates.note = updates.note;

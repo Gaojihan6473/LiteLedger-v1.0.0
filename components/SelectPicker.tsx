@@ -13,13 +13,15 @@ interface SelectPickerProps {
   onChange: (value: string) => void;
   options: Channel[];
   placeholder?: string;
+  onToggle?: (isOpen: boolean) => void;
 }
 
 export const SelectPicker: React.FC<SelectPickerProps> = ({
   value,
   onChange,
   options,
-  placeholder = '请选择...'
+  placeholder = '请选择...',
+  onToggle
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,11 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // 通知父组件开关状态
+  useEffect(() => {
+    onToggle?.(isOpen);
+  }, [isOpen, onToggle]);
+
   const handleSelect = (id: string) => {
     onChange(id);
     setIsOpen(false);
@@ -48,7 +55,7 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
       {/* 触发按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-10 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
+        className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
       >
         <div className="flex items-center gap-2">
           {selectedOption ? (
@@ -59,14 +66,14 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
               >
                 <Icon
                   name={selectedOption.iconName as any}
-                  size={12}
+                  size={10}
                   style={{ color: selectedOption.color || '#6366F1' }}
                 />
               </div>
-              <span className="text-sm text-slate-700">{selectedOption.name}</span>
+              <span className="text-xs text-slate-700">{selectedOption.name}</span>
             </>
           ) : (
-            <span className="text-sm text-slate-400">{placeholder}</span>
+            <span className="text-xs text-slate-400">{placeholder}</span>
           )}
         </div>
         <Icon name="ChevronLeft" size={16} className="text-slate-400 -rotate-90" />
@@ -74,7 +81,7 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
 
       {/* 下拉面板 */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 p-2 z-50 w-full max-h-72 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute top-full left-0 mt-2 mb-2 bg-white rounded-xl shadow-xl border border-slate-100 p-2 pr-3 z-50 w-full max-h-72 overflow-y-auto scrollbar-thin animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="grid grid-cols-2 gap-1">
             {options.map((option) => (
               <button
@@ -89,12 +96,12 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
                 `}
               >
                 <div
-                  className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-5 h-5 rounded-lg flex items-center justify-center shrink-0"
                   style={{ backgroundColor: (option.color || '#6366F1') + '20' }}
                 >
                   <Icon
                     name={option.iconName as any}
-                    size={12}
+                    size={10}
                     style={{ color: option.color || '#6366F1' }}
                   />
                 </div>
@@ -104,7 +111,7 @@ export const SelectPicker: React.FC<SelectPickerProps> = ({
                   {option.name}
                 </span>
                 {value === option.id && (
-                  <Icon name="Check" size={14} className="ml-auto text-blue-600 shrink-0" />
+                  <Icon name="Check" size={12} className="ml-auto text-blue-600 shrink-0" />
                 )}
               </button>
             ))}
