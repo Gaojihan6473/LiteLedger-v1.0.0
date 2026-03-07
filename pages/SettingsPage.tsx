@@ -61,15 +61,15 @@ export const SettingsPage: React.FC = () => {
       <div className="max-w-2xl mx-auto px-4">
         {/* 账户信息 - macOS 风格分组 */}
         {currentUser && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-4">
+            <div className="px-4 py-2 bg-slate-50 border-b border-slate-200">
               <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">账户</span>
             </div>
-            <div className="p-4">
+            <div className="p-3">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="text-lg font-medium text-slate-900">{currentUser.username}</p>
-                  <p className="text-sm text-slate-500 truncate">{currentUser.email}</p>
+                  <p className="text-sm font-medium text-slate-900">{currentUser.username}</p>
+                  <p className="text-xs text-slate-500 truncate">{currentUser.email}</p>
                 </div>
                 <Button
                   variant="secondary"
@@ -87,15 +87,15 @@ export const SettingsPage: React.FC = () => {
         {/* 退出登录 - 已移至账户卡片内 */}
 
         {/* 数据管理 */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-          <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-4">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-200">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">数据</span>
           </div>
-          <div className="p-4">
-            <div className="flex items-center justify-between py-2">
+          <div className="p-3">
+            <div className="flex items-center justify-between py-1">
               <div className="flex-1 min-w-0 pr-4">
-                <p className="text-base font-medium text-slate-900">清空所有数据</p>
-                <p className="text-sm text-slate-500 mt-0.5">删除所有记账记录和账户设置，无法恢复</p>
+                <p className="text-sm font-medium text-slate-900">清空所有数据</p>
+                <p className="text-xs text-slate-500 mt-0.5">删除所有记账记录和账户设置，无法恢复</p>
               </div>
               <Button
                 variant="danger"
@@ -111,14 +111,14 @@ export const SettingsPage: React.FC = () => {
 
         {/* 关于 */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-200">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">关于</span>
           </div>
-          <div className="p-4">
-            <div className="flex items-center justify-between py-2">
+          <div className="p-3">
+            <div className="flex items-center justify-between py-1">
               <div className="flex-1 min-w-0">
-                <p className="text-base font-medium text-slate-900">LiteLedger</p>
-                <p className="text-sm text-slate-500 mt-0.5">轻账 v1.0.0</p>
+                <p className="text-sm font-medium text-slate-900">LiteLedger</p>
+                <p className="text-xs text-slate-500 mt-0.5">轻账 v1.0.0</p>
               </div>
             </div>
           </div>
