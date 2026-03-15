@@ -1,8 +1,9 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Layout } from '../components/Layout';
 import { Icon } from '../components/Icon';
 import { EditTransactionModal } from '../components/EditTransactionModal';
+import { SelectPicker } from '../components/SelectPicker';
 import { useStore } from '../store';
 import { DayGroup, TransactionRecord } from '../types';
 
@@ -10,7 +11,34 @@ export const TransactionsPage: React.FC = () => {
   const { records, categories, channels, deleteRecord, getFilteredRecords } = useStore();
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [editingRecord, setEditingRecord] = useState<TransactionRecord | null>(null);
-  const [showToast, setShowToast] = useState(false);
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
+
+  // 筛选状态
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterCategoryId, setFilterCategoryId] = useState<string>('');
+  const [filterChannelId, setFilterChannelId] = useState<string>('');
+  const [filterAmountMin, setFilterAmountMin] = useState<string>('');
+  const [filterAmountMax, setFilterAmountMax] = useState<string>('');
+
+  // 筛选区域 ref，用于点击外部关闭
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  // 点击外部关闭筛选区域
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setShowFilter(false);
+      }
+    };
+
+    if (showFilter) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showFilter]);
+
+  // 判断是否有激活的筛选
+  const hasActiveFilters = filterCategoryId || filterChannelId || filterAmountMin || filterAmountMax;
 
   // Group records by day
   const groupedRecords = useMemo(() => {
@@ -19,7 +47,20 @@ export const TransactionsPage: React.FC = () => {
     // 1. Filter by selected month
     const filtered = filteredRecords.filter(r => {
       const d = new Date(r.date);
-      return d.getMonth() === selectedMonth.getMonth() && d.getFullYear() === selectedMonth.getFullYear();
+      const monthMatch = d.getMonth() === selectedMonth.getMonth() && d.getFullYear() === selectedMonth.getFullYear();
+
+      // 分类筛选
+      const categoryMatch = !filterCategoryId || r.categoryId === filterCategoryId;
+
+      // 渠道筛选
+      const channelMatch = !filterChannelId || r.channelId === filterChannelId;
+
+      // 金额筛选
+      const amount = Math.abs(r.amount);
+      const amountMatch = (!filterAmountMin || amount >= parseFloat(filterAmountMin)) &&
+                         (!filterAmountMax || amount <= parseFloat(filterAmountMax));
+
+      return monthMatch && categoryMatch && channelMatch && amountMatch;
     });
 
     // Sort by createdAt desc (newest first within same day)
@@ -49,7 +90,7 @@ export const TransactionsPage: React.FC = () => {
     groups.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return groups;
-  }, [records, selectedMonth]);
+  }, [records, selectedMonth, filterCategoryId, filterChannelId, filterAmountMin, filterAmountMax]);
 
   const getCategory = (id: string) => categories.find(c => c.id === id);
   const getChannel = (id?: string) => channels.find(c => c.id === id);
@@ -89,8 +130,92 @@ export const TransactionsPage: React.FC = () => {
   return (
     <Layout activeTab="transactions" title="账单明细">
       <div className="max-w-6xl mx-auto pb-6">
-        {/* Header with Month Selector */}
-        <div className="flex items-center justify-end mb-4 md:mb-8 mt-2 md:mt-0">
+        {/* Header with Filter and Month Selector */}
+        <div className="flex items-center justify-between mb-4 md:mb-8 mt-2 md:mt-0">
+          {/* 左侧：筛选按钮 + 筛选面板 */}
+          <div className="relative" ref={filterRef}>
+            <button
+              onClick={() => setShowFilter(!showFilter)}
+              className={`p-1.5 rounded-t-lg transition-colors relative z-10 ${
+                hasActiveFilters
+                  ? 'text-blue-600 bg-blue-50'
+                  : showFilter
+                    ? 'text-blue-600 bg-white shadow-xl'
+                    : 'text-slate-400 hover:bg-slate-100'
+              }`}
+              title="筛选"
+            >
+              <Icon name="Filter" size={18} />
+            </button>
+
+            {/* 筛选面板 - 连接在筛选按钮下方 */}
+            {showFilter && (
+              <div className="absolute top-full left-0 -mt-px bg-white rounded-b-xl rounded-tr-xl shadow-xl border border-slate-100 border-t-0 border-l-0 p-3 z-30 w-64 animate-in fade-in slide-in-from-top-2 duration-200">
+                {/* 分类筛选 */}
+                <div className="mb-2.5">
+                  <label className="text-[10px] font-medium text-slate-400 mb-1 block">分类</label>
+                  <SelectPicker
+                    value={filterCategoryId}
+                    onChange={setFilterCategoryId}
+                    options={[{ id: '', name: '全部', iconName: 'Wallet', color: '#6366F1' }, ...categories]}
+                    placeholder="全部"
+                  />
+                </div>
+
+                {/* 渠道筛选 */}
+                <div className="mb-2.5">
+                  <label className="text-[10px] font-medium text-slate-400 mb-1 block">渠道</label>
+                  <SelectPicker
+                    value={filterChannelId}
+                    onChange={setFilterChannelId}
+                    options={[{ id: '', name: '全部', iconName: 'CreditCard', color: '#6366F1' }, ...channels]}
+                    placeholder="全部"
+                  />
+                </div>
+
+                {/* 金额范围筛选 */}
+                <div className="flex gap-2 mb-2.5">
+                  <div className="flex-1">
+                    <label className="text-[10px] font-medium text-slate-400 mb-1 block">最小</label>
+                    <input
+                      type="number"
+                      value={filterAmountMin}
+                      onChange={(e) => setFilterAmountMin(e.target.value)}
+                      placeholder="0"
+                      className="w-full h-8 px-2.5 text-xs bg-slate-50 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-300"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-[10px] font-medium text-slate-400 mb-1 block">最大</label>
+                    <input
+                      type="number"
+                      value={filterAmountMax}
+                      onChange={(e) => setFilterAmountMax(e.target.value)}
+                      placeholder="不限"
+                      className="w-full h-8 px-2.5 text-xs bg-slate-50 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-300"
+                    />
+                  </div>
+                </div>
+
+                {/* 清空按钮 */}
+                {hasActiveFilters && (
+                  <button
+                    onClick={() => {
+                      setFilterCategoryId('');
+                      setFilterChannelId('');
+                      setFilterAmountMin('');
+                      setFilterAmountMax('');
+                    }}
+                    className="w-full h-7 text-[10px] font-medium text-slate-500 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 rounded-lg transition-colors"
+                  >
+                    清空筛选条件
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* 右侧：月份选择器 */}
           <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
              <button onClick={() => changeMonth(-1)} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors cursor-pointer">
                 <Icon name="ChevronLeft" size={18} />
@@ -120,7 +245,7 @@ export const TransactionsPage: React.FC = () => {
           {groupedRecords.map((group) => (
             <div key={group.date}>
               {/* Date Header */}
-              <div className="flex items-center justify-between mb-4 px-2">
+              <div className="flex items-center justify-between mb-2 px-2">
                 <div className="flex items-center gap-2">
                   <span className="text-base font-bold text-slate-700">
                     {formatDateHeader(group.date)}
@@ -203,12 +328,7 @@ export const TransactionsPage: React.FC = () => {
                         </span>
                         <button
                           onClick={() => {
-                            if (record.type === 'transfer') {
-                              setShowToast(true);
-                              setTimeout(() => setShowToast(false), 3000);
-                            } else {
-                              setEditingRecord(record);
-                            }
+                            setEditingRecord(record);
                           }}
                           className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-slate-300 hover:bg-slate-100 hover:text-slate-500 transition-all cursor-pointer"
                           title="编辑"
@@ -234,17 +354,20 @@ export const TransactionsPage: React.FC = () => {
           onDelete={() => {
             deleteRecord(editingRecord.id);
             setEditingRecord(null);
+            // 显示删除成功 toast
+            setShowDeleteToast(true);
+            setTimeout(() => setShowDeleteToast(false), 1500);
           }}
         />
       )}
 
-      {/* Toast Notification */}
-      <div className={`fixed top-6 right-6 md:left-auto md:-translate-x-0 bg-white border border-slate-100 text-slate-900 px-4 py-3 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-2 z-50 transform ${showToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
-        <div className="bg-slate-600 rounded-full p-1">
-          <Icon name="AlertCircle" size={14} className="text-white" />
+      {/* Delete Success Toast */}
+      <div className={`fixed top-6 right-6 md:left-auto md:-translate-x-0 bg-white border border-slate-100 text-slate-900 px-4 py-3 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-2 z-[60] transform ${showDeleteToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
+        <div className="bg-green-500 rounded-full p-1 shadow-lg shadow-green-200">
+          <Icon name="Check" size={14} className="text-white" />
         </div>
         <div>
-          <h4 className="font-bold text-xs">转账明细暂不支持编辑</h4>
+          <h4 className="font-bold text-xs">删除成功</h4>
         </div>
       </div>
     </Layout>

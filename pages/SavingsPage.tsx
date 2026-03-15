@@ -309,27 +309,27 @@ export const SavingsPage: React.FC = () => {
                 <p className="text-slate-500 text-sm mt-1">请填写各账户的当前余额，以便我们为您提供准确的资产统计。</p>
               </div>
               
-              <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 grid grid-cols-2 gap-2">
                 {channels.map((channel) => (
-                  <div key={channel.id} className="flex items-center gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50">
-                    <div 
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
-                      style={{ backgroundColor: channel.color }}
-                    >
-                      <Icon name={channel.iconName} size={20} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-slate-900 mb-1">{channel.name}</div>
-                      <div className="relative">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-sm">¥</span>
-                        <input
-                          type="number"
-                          placeholder="0.00"
-                          value={initialBalances[channel.name] || ''}
-                          onChange={(e) => setInitialBalances(prev => ({ ...prev, [channel.name]: e.target.value }))}
-                          className="w-full pl-6 pr-2 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                  <div key={channel.id} className="flex flex-col gap-1 p-2 border border-slate-200 rounded-xl bg-slate-50/50">
+                    <div className="flex items-center gap-1.5">
+                      <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-white shadow-sm shrink-0"
+                        style={{ backgroundColor: channel.color }}
+                      >
+                        <Icon name={channel.iconName} size={14} />
                       </div>
+                      <div className="text-xs font-medium text-slate-900 truncate">{channel.name}</div>
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-1.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">¥</span>
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        value={initialBalances[channel.name] || ''}
+                        onChange={(e) => setInitialBalances(prev => ({ ...prev, [channel.name]: e.target.value }))}
+                        className="w-full pl-5 pr-1 py-1 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
                     </div>
                   </div>
                 ))}

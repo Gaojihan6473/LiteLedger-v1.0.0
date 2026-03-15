@@ -8,7 +8,7 @@ import {
   MessageCircle, QrCode, Wifi, Users, Cat, FileText,
   Briefcase, Gem, Laptop, Key, Receipt, Settings,
   ArrowRight, ArrowLeft, ArrowDown, ArrowLeftRight,
-  LogOut, AlertCircle,
+  LogOut, AlertCircle, Filter,
   // 餐饮美食
   Coffee, Pizza, ChefHat, IceCream, Cookie, Apple, Cake,
   // 交通出行
@@ -53,7 +53,7 @@ const iconMap: Record<string, any> = {
   MessageCircle, QrCode, Wifi, Users, Cat, FileText,
   Briefcase, Gem, Laptop, Key, Receipt, Settings,
   ArrowRight, ArrowLeft, ArrowDown, ArrowLeftRight,
-  LogOut, AlertCircle,
+  LogOut, AlertCircle, Filter,
   // 餐饮美食
   Coffee, Pizza, ChefHat, IceCream, Cookie, Apple, Cake,
   // 交通出行

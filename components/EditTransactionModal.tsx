@@ -53,8 +53,50 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
   // 筛选当前类型的分类
   const filteredCategories = categories.filter(c => c.type === type);
 
-  // 选中的分类
-  const selectedCategory = categories.find(c => c.id === categoryId);
+  // 判断是否是转账类型（只读模式）
+  const isTransfer = record.type === 'transfer';
+
+  // 选中的分类（转账类型使用 record.categoryId，非转账类型使用 categoryId）
+  const currentCategoryId = isTransfer ? record.categoryId : categoryId;
+  const selectedCategory = categories.find(c => c.id === currentCategoryId);
+
+  // 选中的渠道
+  const selectedChannel = channels.find(c => c.id === record.channelId);
+
+  // 转账类型：根据 subCategory 判断是转入还是转出
+  const subCategory = record.subCategoryId ? selectedCategory?.subCategories?.find(s => s.id === record.subCategoryId) : null;
+  const isTransferIn = isTransfer && subCategory?.name === '转入';
+
+  // 获取转入/转出账户信息
+  const getTransferAccounts = () => {
+    if (!isTransfer) return { fromChannel: null, toChannel: null };
+
+    const note = record.note || '';
+
+    if (isTransferIn) {
+      // 当前是转入记录，备注格式：'从${fromChannelName}转入' 或 '从${fromChannelName}转入-${userNote}'
+      const match = note.match(/^从(.+?)转入/);
+      const fromChannelName = match ? match[1] : null;
+      // 查找名称匹配的渠道
+      const fromChannel = fromChannelName ? channels.find(c => fromChannelName.includes(c.name)) : null;
+      return {
+        fromChannel: fromChannel || null,
+        toChannel: selectedChannel
+      };
+    } else {
+      // 当前是转出记录，备注格式：'转出至${toChannelName}' 或 '转出至${toChannelName}-${userNote}'
+      const match = note.match(/^转出至(.+?)(?:-|：|$)/);
+      const toChannelName = match ? match[1] : null;
+      // 查找名称匹配的渠道
+      const toChannel = toChannelName ? channels.find(c => toChannelName.includes(c.name)) : null;
+      return {
+        fromChannel: selectedChannel,
+        toChannel: toChannel || null
+      };
+    }
+  };
+
+  const transferAccounts = getTransferAccounts();
 
   // 监听二级分类变化，自动更新备注（参考记账页逻辑）
   useEffect(() => {
@@ -77,6 +119,12 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 
   // 处理提交
   const handleSubmit = async () => {
+    // 转账类型直接关闭弹窗
+    if (isTransfer) {
+      onSuccess();
+      return;
+    }
+
     if (!amount || parseFloat(amount) <= 0) {
       alert('请输入有效金额');
       return;
@@ -140,16 +188,27 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 
         {/* 表单内容 */}
         <div ref={contentRef} className="px-4 sm:px-4 p-3 sm:p-4 space-y-1.5 sm:space-y-3 overflow-y-auto scrollbar-thin flex-1 min-h-0 pb-10">
-          {/* Type Switcher - 只显示支出和收入 */}
+          {/* Type Switcher - 支出/收入/转账 */}
           <div className="flex bg-slate-100 p-0.5 rounded-lg">
-            {(['expense', 'income'] as const).map((t) => (
+            {(['expense', 'income', 'transfer'] as const).map((t) => (
               <button
                 key={t}
-                onClick={() => handleTypeChange(t)}
-                className={`flex-1 py-1 rounded-md text-sm font-medium transition-all cursor-pointer ${
-                  type === t
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
+                onClick={() => {
+                  // 非转账记录不能切换到转账tab
+                  if (t === 'transfer' && !isTransfer) return;
+                  if (!isTransfer) handleTypeChange(t);
+                }}
+                disabled={isTransfer || (t === 'transfer' && !isTransfer)}
+                className={`flex-1 py-1 rounded-md text-xs font-medium transition-all ${
+                  isTransfer
+                    ? type === t
+                      ? 'bg-white text-slate-900 shadow-sm cursor-not-allowed'
+                      : 'text-slate-300 cursor-not-allowed'
+                    : t === 'transfer' && !isTransfer
+                      ? 'text-slate-300 cursor-not-allowed'
+                      : type === t
+                        ? 'bg-white text-slate-900 shadow-sm cursor-pointer'
+                        : 'text-slate-500 hover:text-slate-700 cursor-pointer'
                 }`}
               >
                 {typeLabels[t]}
@@ -163,16 +222,22 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
               金额
             </label>
             <div className="relative">
-              <span className={`absolute left-0 top-1/2 -translate-y-1/2 text-lg font-bold transition-colors ${type === 'expense' ? 'text-slate-900' : 'text-green-600'}`}>
+              <span className={`absolute left-0 top-1/2 -translate-y-1/2 text-lg font-bold transition-colors ${isTransfer ? 'text-slate-900' : (type === 'expense' ? 'text-slate-900' : 'text-green-600')}`}>
                 ¥
               </span>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                className={`w-full bg-transparent text-xl font-bold outline-none pl-5 py-0.5 border-b-2 border-slate-100 focus:border-blue-500 transition-colors placeholder-slate-200 ${type === 'expense' ? 'text-slate-900' : 'text-green-600'}`}
-              />
+              {isTransfer ? (
+                <div className="w-full text-xl font-bold outline-none pl-5 py-0.5 border-b-2 border-slate-100 text-slate-900">
+                  {Math.abs(record.amount).toFixed(2)}
+                </div>
+              ) : (
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                  className={`w-full bg-transparent text-xl font-bold outline-none pl-5 py-0.5 border-b-2 border-slate-100 focus:border-blue-500 transition-colors placeholder-slate-200 ${type === 'expense' ? 'text-slate-900' : 'text-green-600'}`}
+                />
+              )}
             </div>
           </div>
 
@@ -181,29 +246,76 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             <label className="text-xs font-medium text-slate-400 mb-0.5 block">
               日期
             </label>
-            <DatePicker value={date} onChange={setDate} />
+            {isTransfer ? (
+              <div className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center text-sm text-slate-700">
+                {record.date}
+              </div>
+            ) : (
+              <DatePicker value={date} onChange={setDate} />
+            )}
           </div>
 
           {/* Category Picker */}
           <div>
-            <label className="text-xs font-medium text-slate-400 mb-0.5 block">
-              分类
-            </label>
-            <div className="relative">
-              <button
-                onClick={() => {
-                  if (!showCategoryPicker) {
-                    setTimeout(scrollToBottom, 100);
-                  }
-                  setShowCategoryPicker(!showCategoryPicker);
-                }}
-                className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
-              >
-                <span className={`text-sm ${selectedCategory ? 'text-slate-700' : 'text-slate-400'}`}>
-                  {getCategoryDisplayText()}
-                </span>
-                <Icon name="ChevronLeft" size={14} className="text-slate-400 -rotate-90" />
-              </button>
+            {isTransfer ? (
+              <>
+                <div className="mb-2">
+                  <label className="text-xs font-medium text-slate-400 mb-0.5 block">
+                    转出账户
+                  </label>
+                  <div className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2">
+                    <div
+                      className="w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: (transferAccounts.fromChannel?.color || '#6366F1') + '20' }}
+                    >
+                      <Icon
+                        name={(transferAccounts.fromChannel?.iconName) as any}
+                        size={12}
+                        style={{ color: transferAccounts.fromChannel?.color || '#6366F1' }}
+                      />
+                    </div>
+                    <span className="text-xs text-slate-700 truncate">{transferAccounts.fromChannel?.name || '-'}</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-slate-400 mb-0.5 block">
+                    转入账户
+                  </label>
+                  <div className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2">
+                    <div
+                      className="w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: (transferAccounts.toChannel?.color || '#6366F1') + '20' }}
+                    >
+                      <Icon
+                        name={(transferAccounts.toChannel?.iconName) as any}
+                        size={12}
+                        style={{ color: transferAccounts.toChannel?.color || '#6366F1' }}
+                      />
+                    </div>
+                    <span className="text-xs text-slate-700 truncate">{transferAccounts.toChannel?.name || '-'}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <label className="text-xs font-medium text-slate-400 mb-0.5 block">
+                  分类
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      if (!showCategoryPicker) {
+                        setTimeout(scrollToBottom, 100);
+                      }
+                      setShowCategoryPicker(!showCategoryPicker);
+                    }}
+                    className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span className={`text-sm ${selectedCategory ? 'text-slate-700' : 'text-slate-400'}`}>
+                      {getCategoryDisplayText()}
+                    </span>
+                    <Icon name="ChevronLeft" size={14} className="text-slate-400 -rotate-90" />
+                  </button>
 
               {/* 分类选择面板 - 一级分类列表，点击后展开二级分类胶囊 */}
               {showCategoryPicker && (
@@ -282,38 +394,48 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 </div>
               )}
             </div>
+              </>
+            )}
           </div>
 
-          {/* Channel */}
-          <div>
-            <label className="text-xs font-medium text-slate-400 mb-0.5 block">
-              渠道 <span className="text-red-500">*</span>
-            </label>
-            <SelectPicker
-              value={channelId}
-              onChange={setChannelId}
-              options={channels}
-              placeholder="选择资金账户..."
-              onToggle={(isOpen) => {
-                if (isOpen) {
-                  setTimeout(scrollToBottom, 100);
-                }
-              }}
-            />
-          </div>
+          {/* Channel - 转账类型不显示（已在上方显示转出/转入账户） */}
+          {!isTransfer && (
+            <div>
+              <label className="text-xs font-medium text-slate-400 mb-0.5 block">
+                渠道 <span className="text-red-500">*</span>
+              </label>
+              <SelectPicker
+                value={channelId}
+                onChange={setChannelId}
+                options={channels}
+                placeholder="选择资金账户..."
+                onToggle={(isOpen) => {
+                  if (isOpen) {
+                    setTimeout(scrollToBottom, 100);
+                  }
+                }}
+              />
+            </div>
+          )}
 
           {/* Note */}
           <div>
             <label className="text-xs font-medium text-slate-400 mb-0.5 block">
               备注
             </label>
-            <input
-              type="text"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="添加备注..."
-              className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 focus:border-blue-500 transition-colors outline-none text-sm text-slate-700"
-            />
+            {isTransfer ? (
+              <div className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center text-sm text-slate-400">
+                {record.note || '-'}
+              </div>
+            ) : (
+              <input
+                type="text"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="添加备注..."
+                className="w-full h-9 px-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 focus:border-blue-500 transition-colors outline-none text-sm text-slate-700"
+              />
+            )}
           </div>
         </div>
 
@@ -330,7 +452,7 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             disabled={isSubmitting}
             className="flex-1 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm"
           >
-            {isSubmitting ? '保存中...' : '确认'}
+            {isSubmitting ? '保存中...' : (isTransfer ? '确认' : '确认')}
           </button>
         </div>
       </div>
