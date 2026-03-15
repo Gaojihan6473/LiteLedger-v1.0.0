@@ -15,10 +15,14 @@ export const TransactionsPage: React.FC = () => {
 
   // 筛选状态
   const [showFilter, setShowFilter] = useState(false);
-  const [filterCategoryId, setFilterCategoryId] = useState<string>('');
-  const [filterChannelId, setFilterChannelId] = useState<string>('');
+  const [filterCategoryIds, setFilterCategoryIds] = useState<string>('');
+  const [filterChannelIds, setFilterChannelIds] = useState<string>('');
   const [filterAmountMin, setFilterAmountMin] = useState<string>('');
   const [filterAmountMax, setFilterAmountMax] = useState<string>('');
+
+  // 将逗号分隔的字符串转换为数组
+  const filterCategoryIdArray = filterCategoryIds ? filterCategoryIds.split(',') : [];
+  const filterChannelIdArray = filterChannelIds ? filterChannelIds.split(',') : [];
 
   // 筛选区域 ref，用于点击外部关闭
   const filterRef = useRef<HTMLDivElement>(null);
@@ -38,7 +42,7 @@ export const TransactionsPage: React.FC = () => {
   }, [showFilter]);
 
   // 判断是否有激活的筛选
-  const hasActiveFilters = filterCategoryId || filterChannelId || filterAmountMin || filterAmountMax;
+  const hasActiveFilters = filterCategoryIds || filterChannelIds || filterAmountMin || filterAmountMax;
 
   // Group records by day
   const groupedRecords = useMemo(() => {
@@ -49,11 +53,11 @@ export const TransactionsPage: React.FC = () => {
       const d = new Date(r.date);
       const monthMatch = d.getMonth() === selectedMonth.getMonth() && d.getFullYear() === selectedMonth.getFullYear();
 
-      // 分类筛选
-      const categoryMatch = !filterCategoryId || r.categoryId === filterCategoryId;
+      // 分类筛选（支持多选）
+      const categoryMatch = filterCategoryIdArray.length === 0 || filterCategoryIdArray.includes(r.categoryId);
 
-      // 渠道筛选
-      const channelMatch = !filterChannelId || r.channelId === filterChannelId;
+      // 渠道筛选（支持多选）
+      const channelMatch = filterChannelIdArray.length === 0 || (r.channelId && filterChannelIdArray.includes(r.channelId));
 
       // 金额筛选
       const amount = Math.abs(r.amount);
@@ -90,7 +94,7 @@ export const TransactionsPage: React.FC = () => {
     groups.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return groups;
-  }, [records, selectedMonth, filterCategoryId, filterChannelId, filterAmountMin, filterAmountMax]);
+  }, [records, selectedMonth, filterCategoryIds, filterChannelIds, filterAmountMin, filterAmountMax]);
 
   const getCategory = (id: string) => categories.find(c => c.id === id);
   const getChannel = (id?: string) => channels.find(c => c.id === id);
@@ -155,10 +159,11 @@ export const TransactionsPage: React.FC = () => {
                 <div className="mb-2.5">
                   <label className="text-[10px] font-medium text-slate-400 mb-1 block">分类</label>
                   <SelectPicker
-                    value={filterCategoryId}
-                    onChange={setFilterCategoryId}
-                    options={[{ id: '', name: '全部', iconName: 'Wallet', color: '#6366F1' }, ...categories]}
-                    placeholder="全部"
+                    value={filterCategoryIds}
+                    onChange={setFilterCategoryIds}
+                    options={categories}
+                    placeholder="全部（多选）"
+                    multiple
                   />
                 </div>
 
@@ -166,10 +171,11 @@ export const TransactionsPage: React.FC = () => {
                 <div className="mb-2.5">
                   <label className="text-[10px] font-medium text-slate-400 mb-1 block">渠道</label>
                   <SelectPicker
-                    value={filterChannelId}
-                    onChange={setFilterChannelId}
-                    options={[{ id: '', name: '全部', iconName: 'CreditCard', color: '#6366F1' }, ...channels]}
-                    placeholder="全部"
+                    value={filterChannelIds}
+                    onChange={setFilterChannelIds}
+                    options={channels}
+                    placeholder="全部（多选）"
+                    multiple
                   />
                 </div>
 
@@ -201,8 +207,8 @@ export const TransactionsPage: React.FC = () => {
                 {hasActiveFilters && (
                   <button
                     onClick={() => {
-                      setFilterCategoryId('');
-                      setFilterChannelId('');
+                      setFilterCategoryIds('');
+                      setFilterChannelIds('');
                       setFilterAmountMin('');
                       setFilterAmountMax('');
                     }}

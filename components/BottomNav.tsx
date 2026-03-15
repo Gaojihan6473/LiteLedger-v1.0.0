@@ -15,6 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, variant = 'mobi
     { id: 'stats', label: '统计', icon: 'PieChart', path: '/stats' },
     { id: 'calendar', label: '日历', icon: 'Calendar', path: '/calendar' },
     { id: 'savings', label: '存款', icon: 'Wallet', path: '/savings' },
+    { id: 'settings', label: '设置', icon: 'Settings', path: '/settings' },
   ];
 
   const mobileNavItems = [
