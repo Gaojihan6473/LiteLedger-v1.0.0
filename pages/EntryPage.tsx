@@ -357,10 +357,8 @@ export const EntryPage: React.FC = () => {
   };
 
   return (
-    <Layout activeTab="entry">
-      <div className="max-w-6xl mx-auto h-[calc(100vh-6rem)] flex flex-col">
-        <h1 className="text-2xl font-bold text-slate-900 mb-6 hidden md:block">快速记账</h1>
-        
+    <Layout activeTab="entry" title="记账">
+      <div className="max-w-6xl mx-auto md:h-[calc(100vh-6rem)] flex flex-col pb-6 md:pb-0">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full">
           
           {/* Left Panel: Inputs */}
@@ -757,13 +755,12 @@ export const EntryPage: React.FC = () => {
         </div>
 
         {/* Toast Notification */}
-        <div className={`fixed top-6 right-6 md:left-auto md:-translate-x-0 bg-white border border-slate-100 text-slate-900 px-6 py-4 rounded-xl shadow-2xl transition-all duration-500 flex items-center gap-3 z-50 transform ${showToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
-          <div className="bg-green-500 rounded-full p-1.5 shadow-lg shadow-green-200">
-            <Icon name="Plus" size={16} className="text-white" />
+        <div className={`fixed top-6 right-6 md:left-auto md:-translate-x-0 bg-white border border-slate-100 text-slate-900 px-4 py-3 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-2 z-50 transform ${showToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
+          <div className="bg-green-500 rounded-full p-1 shadow-lg shadow-green-200">
+            <Icon name="Plus" size={14} className="text-white" />
           </div>
           <div>
-            <h4 className="font-bold text-sm">记账成功</h4>
-            <p className="text-xs text-slate-400">您的记录已保存</p>
+            <h4 className="font-bold text-xs">记账成功</h4>
           </div>
         </div>
 
