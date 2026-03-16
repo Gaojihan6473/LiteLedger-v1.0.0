@@ -189,7 +189,7 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         {/* 表单内容 */}
         <div ref={contentRef} className="px-4 sm:px-4 p-3 sm:p-4 space-y-1.5 sm:space-y-3 overflow-y-auto scrollbar-thin flex-1 min-h-0 pb-10">
           {/* Type Switcher - 支出/收入/转账 */}
-          <div className="flex bg-slate-100 p-0.5 rounded-lg">
+          <div className="flex bg-slate-100 p-1 rounded-xl">
             {(['expense', 'income', 'transfer'] as const).map((t) => (
               <button
                 key={t}
@@ -199,7 +199,7 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                   if (!isTransfer) handleTypeChange(t);
                 }}
                 disabled={isTransfer || (t === 'transfer' && !isTransfer)}
-                className={`flex-1 py-1 rounded-md text-xs font-medium transition-all ${
+                className={`flex-1 py-1.5 rounded-lg text-sm font-semibold text-center transition-all ${
                   isTransfer
                     ? type === t
                       ? 'bg-white text-slate-900 shadow-sm cursor-not-allowed'

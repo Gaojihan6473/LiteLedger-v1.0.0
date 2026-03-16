@@ -9,9 +9,11 @@ interface LayoutProps {
   activeTab?: 'entry' | 'transactions' | 'stats' | 'savings' | 'calendar' | 'settings';
   title?: string;
   showSettingsButton?: boolean;
+  showAIVoiceButton?: boolean;
+  onAIVoiceClick?: () => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, activeTab, title, showSettingsButton = true }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, activeTab, title, showSettingsButton = true, showAIVoiceButton = false, onAIVoiceClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSettingsPage = location.pathname === '/settings';
@@ -56,6 +58,17 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, title, show
                 <Icon name="Settings" size={20} className="text-slate-600" />
               </button>
             ) : null}
+            {/* 右侧按钮：AI语音记账按钮 */}
+            {showAIVoiceButton && (
+              <button
+                onClick={onAIVoiceClick}
+                className="absolute right-2 p-2.5 -mr-2 rounded-lg hover:bg-slate-100/80 transition-colors cursor-pointer"
+              >
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center">
+                  <Icon name="Mic" size={18} className="text-white" />
+                </div>
+              </button>
+            )}
             <h1 className="text-lg font-semibold text-slate-900">{title}</h1>
           </div>
         )}

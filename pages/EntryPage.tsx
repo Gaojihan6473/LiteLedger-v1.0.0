@@ -6,6 +6,7 @@ import { Icon } from '../components/Icon';
 import { AddCategoryModal } from '../components/AddCategoryModal';
 import { DatePicker } from '../components/DatePicker';
 import { SelectPicker } from '../components/SelectPicker';
+import { AIVoiceRecordingModal } from '../components/AIVoiceRecordingModal';
 import { useStore } from '../store';
 import { TransactionType, Category, Channel } from '../types';
 import {
@@ -138,6 +139,42 @@ export const EntryPage: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showAIVoiceModal, setShowAIVoiceModal] = useState(false);
+
+  // 处理 AI 语音记账确认
+  const handleAIConfirm = (data: {
+    type: TransactionType;
+    amount: string;
+    date: string;
+    categoryId: string;
+    subCategoryId?: string;
+    channelId: string;
+    fromChannelId?: string;  // 转账转出账户
+    toChannelId?: string;    // 转账转入账户
+    note: string;
+  }) => {
+    // 填充表单
+    setType(data.type);
+    setAmount(data.amount);
+    setDate(data.date);
+    setSelectedCategoryId(data.categoryId);
+    setSelectedSubCategoryId(data.subCategoryId || '');
+    setSelectedChannelId(data.channelId);
+
+    // 转账类型使用 fromChannelId 和 toChannelId
+    if (data.type === 'transfer') {
+      setFromChannelId(data.fromChannelId || '');
+      setToChannelId(data.toChannelId || '');
+    } else {
+      setFromChannelId('');
+      setToChannelId('');
+    }
+
+    setNote(data.note);
+
+    // 关闭弹窗
+    setShowAIVoiceModal(false);
+  };
 
   const filteredCategories = categories.filter(c => c.type === type);
 
@@ -357,7 +394,7 @@ export const EntryPage: React.FC = () => {
   };
 
   return (
-    <Layout activeTab="entry" title="记账">
+    <Layout activeTab="entry" title="记账" showAIVoiceButton={true} onAIVoiceClick={() => setShowAIVoiceModal(true)}>
       <div className="max-w-6xl mx-auto md:h-[calc(100vh-6rem)] flex flex-col pb-6 md:pb-0">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full">
           
@@ -770,6 +807,13 @@ export const EntryPage: React.FC = () => {
           onClose={() => setShowAddModal(false)}
           onSave={handleAddCategory}
           defaultType={type}
+        />
+
+        {/* AI Voice Recording Modal */}
+        <AIVoiceRecordingModal
+          isOpen={showAIVoiceModal}
+          onClose={() => setShowAIVoiceModal(false)}
+          onConfirm={handleAIConfirm}
         />
       </div>
     </Layout>
