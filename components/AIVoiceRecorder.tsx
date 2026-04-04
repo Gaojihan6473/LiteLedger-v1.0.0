@@ -2,24 +2,13 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Icon } from './Icon';
 import { iflytekRecorder } from '../lib/iflytek';
 
-// 声波条组件
-const WaveBar: React.FC<{ height: number; delay: number; width?: number }> = ({ height, delay, width = 2 }) => (
-  <div
-    className="bg-gradient-to-t from-red-400 to-red-500 rounded-full"
-    style={{
-      height: `${height}%`,
-      width: `${width}px`,
-      animationDelay: `${delay}ms`,
-      transition: 'height 40ms ease-out',
-    }}
-  />
-);
-
-// 声波组件（根据音量动态显示，更细粒度）
-const SoundWaves: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) => {
-  const [bars, setBars] = useState<number[]>(Array(13).fill(15));
+// 声波组件（直接操作DOM，避免React状态更新带来的重渲染）
+export const SoundWaves: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationRef = useRef<number | undefined>(undefined);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const barsDataRef = useRef<number[]>(Array(13).fill(15));
 
   useEffect(() => {
     analyserRef.current = analyser;
@@ -27,36 +16,33 @@ const SoundWaves: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) =
 
   useEffect(() => {
     if (!analyser) {
-      // 当停止录音时，重置状态
-      setBars(Array(13).fill(15));
+      // 当停止录音时，重置为默认高度
+      barsDataRef.current = Array(13).fill(15);
+      barRefs.current.forEach((bar) => {
+        if (bar) {
+          bar.style.height = '15%';
+        }
+      });
       return;
     }
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     const bufferLength = analyser.frequencyBinCount;
 
-    let lastUpdate = 0;
-    const updateBars = (timestamp: number) => {
-      // 节流：每16ms更新一次（约60fps）
-      if (timestamp - lastUpdate < 16) {
+    const updateBars = () => {
+      const currentAnalyser = analyserRef.current;
+      if (!currentAnalyser) {
         animationRef.current = requestAnimationFrame(updateBars);
         return;
       }
-      lastUpdate = timestamp;
-
-      const currentAnalyser = analyserRef.current;
-      if (!currentAnalyser) return;
 
       currentAnalyser.getByteFrequencyData(dataArray);
-
       const now = Date.now();
 
       const newBars = Array.from({ length: 13 }, (_, i) => {
-        // 计算当前条对应的频段索引
         const segIndex = Math.floor((i / 13) * bufferLength);
         const nextSegIndex = Math.floor(((i + 1) / 13) * bufferLength);
 
-        // 获取该频段的平均值
         let sum = 0;
         let count = 0;
         for (let j = segIndex; j < nextSegIndex && j < bufferLength; j++) {
@@ -65,17 +51,27 @@ const SoundWaves: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) =
         }
         const average = count > 0 ? sum / count : 0;
 
-        // 基础高度映射（使用对数刻度让人声更明显）
         const normalizedHeight = Math.max(12, Math.min(100, Math.pow(average / 255, 0.7) * 100));
-
-        // 每个条独立的相位偏移，更细致的变化
         const phase1 = Math.sin(now / 150 + i * 0.8) * 10;
         const phase2 = Math.sin(now / 280 + i * 1.5) * 5;
 
         return Math.max(10, Math.min(100, normalizedHeight + phase1 + phase2));
       });
 
-      setBars(newBars);
+      barsDataRef.current = newBars;
+
+      // 直接更新 DOM，不经过 React 状态
+      newBars.forEach((height, i) => {
+        const bar = barRefs.current[i];
+        if (bar) {
+          const centerIndex = 6;
+          const distanceFromCenter = Math.abs(i - centerIndex);
+          const pyramidFactor = 1 - (distanceFromCenter / centerIndex) * 0.6;
+          const adjustedHeight = height * pyramidFactor;
+          bar.style.height = `${adjustedHeight}%`;
+        }
+      });
+
       animationRef.current = requestAnimationFrame(updateBars);
     };
 
@@ -89,9 +85,18 @@ const SoundWaves: React.FC<{ analyser: AnalyserNode | null }> = ({ analyser }) =
   }, [analyser]);
 
   return (
-    <div className="flex items-center gap-0.5 h-14">
-      {bars.map((height, i) => (
-        <WaveBar key={i} height={height} delay={i * 20} width={3} />
+    <div ref={containerRef} className="flex items-center justify-center gap-1 h-full">
+      {Array.from({ length: 13 }, (_, i) => (
+        <div
+          key={i}
+          ref={(el) => { barRefs.current[i] = el; }}
+          className="bg-gradient-to-t from-red-400 to-red-500 rounded-full"
+          style={{
+            height: '15%',
+            width: '4px',
+            transition: 'height 40ms ease-out',
+          }}
+        />
       ))}
     </div>
   );
@@ -252,7 +257,7 @@ export const AIVoiceRecorder: React.FC<AIVoiceRecorderProps> = ({
     <div className="flex flex-col items-center">
       {/* 临时文本显示区域 */}
       {tempText && (
-        <div className="w-full mb-4 px-4 py-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="w-full mb-4 px-4 py-3 bg-white rounded-2xl shadow-sm border border-slate-100">
           <div className="flex items-start justify-between gap-3">
             <p className="text-sm text-slate-700 leading-relaxed flex-1">{tempText}</p>
 

@@ -319,8 +319,6 @@ export const fetchTransactions = async (userId: string): Promise<TransactionReco
 export const addTransaction = async (userId: string, record: Omit<TransactionRecord, 'id' | 'createdAt'>) => {
   const dbData = convertRecordToDb(record, userId);
 
-  console.log('addTransaction dbData:', dbData);
-
   // 先插入数据
   const { error: insertError } = await supabase.from('transactions').insert(dbData);
 
@@ -328,8 +326,6 @@ export const addTransaction = async (userId: string, record: Omit<TransactionRec
     console.error('Insert transaction error:', insertError);
     throw insertError;
   }
-
-  console.log('Insert success, querying for record...');
 
   // 插入成功后，查询刚插入的记录
   // 使用 date 和 amount 作为辅助查询条件（同一用户同时间同金额几乎唯一）
@@ -343,8 +339,6 @@ export const addTransaction = async (userId: string, record: Omit<TransactionRec
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
-
-  console.log('Query result:', data, queryError);
 
   if (queryError) {
     console.error('Query transaction error:', queryError);

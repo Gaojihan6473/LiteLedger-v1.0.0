@@ -58,6 +58,14 @@ export const AIEditModal: React.FC<AIEditModalProps> = ({
     setToChannelId('');
   };
 
+  // 计算表单是否有效（除了备注以外的所有字段）
+  const isFormValid = (() => {
+    if (isTransfer) {
+      return amount && parseFloat(amount) > 0 && channelId && toChannelId;
+    }
+    return amount && parseFloat(amount) > 0 && categoryId && channelId;
+  })();
+
   // 处理提交
   const handleSubmit = () => {
     if (!isTransfer && (!amount || parseFloat(amount) <= 0)) {
@@ -263,7 +271,12 @@ export const AIEditModal: React.FC<AIEditModalProps> = ({
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors cursor-pointer text-sm"
+            disabled={!isFormValid}
+            className={`flex-1 py-2 font-medium rounded-xl transition-colors text-sm ${
+              isFormValid
+                ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+            }`}
           >
             确认
           </button>
