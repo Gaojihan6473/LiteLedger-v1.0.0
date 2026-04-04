@@ -2,10 +2,11 @@ import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { AIChatArea, Message } from '../components/AIChatArea';
-import { AIVoiceRecorder } from '../components/AIVoiceRecorder';
 import { AIEditModal } from '../components/AIEditModal';
 import { useStore } from '../store';
 import { analyzeTransaction, ParsedTransaction, CategoryInfo, ChannelInfo } from '../lib/minimax';
+import { iflytekRecorder } from '../lib/iflytek';
+import { SoundWaves } from '../components/AIVoiceRecorder';
 
 export const AIPage: React.FC = () => {
   const navigate = useNavigate();
@@ -23,8 +24,94 @@ export const AIPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   // 是否正在处理
   const [isProcessing, setIsProcessing] = useState(false);
+  // 正在确认记账的消息 ID
+  const [processingMessageId, setProcessingMessageId] = useState<string | null>(null);
   // 当前编辑的 ParsedTransaction
   const [editingTransaction, setEditingTransaction] = useState<ParsedTransaction | null>(null);
+
+  // 录音相关状态
+  const [isRecording, setIsRecording] = useState(false);
+  const [tempText, setTempText] = useState('');
+  const textHistoryRef = useRef<string[]>([]);
+  const lastTextRef = useRef<string>('');
+    const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
+  const [_error, setError] = useState<string | null>(null);
+
+  // 开始录音
+  const startRecording = useCallback(async () => {
+    if (isProcessing) return;
+
+    setTempText('');
+    setIsRecording(true);
+    setError(null);
+    textHistoryRef.current = [];
+    lastTextRef.current = '';
+
+    try {
+      await iflytekRecorder.start({
+        onResult: (text) => {
+          const trimmedText = text.trim().replace(/^[,，.。]+/, '');
+          if (!trimmedText) return;
+
+          const currentText = textHistoryRef.current.length > 0
+            ? textHistoryRef.current[textHistoryRef.current.length - 1]
+            : '';
+
+          if (trimmedText === currentText || trimmedText === lastTextRef.current) return;
+
+          let finalText: string;
+          if (!currentText) {
+            finalText = trimmedText;
+          } else {
+            let commonLength = 0;
+            const minLen = Math.min(currentText.length, trimmedText.length);
+            for (let i = 0; i < minLen; i++) {
+              if (currentText[i] === trimmedText[i]) commonLength++;
+              else break;
+            }
+            if (commonLength >= 2) {
+              const newPart = trimmedText.substring(commonLength).trim();
+              finalText = newPart ? `${currentText} ${newPart}` : trimmedText;
+            } else {
+              finalText = trimmedText.includes(currentText) ? trimmedText : `${currentText} ${trimmedText}`;
+            }
+          }
+
+          if (finalText && finalText !== currentText) {
+            textHistoryRef.current.push(finalText);
+            lastTextRef.current = finalText;
+            setTempText(finalText);
+          }
+        },
+        onError: (err) => {
+          console.error('Recording error:', err);
+          setError(err);
+          setIsRecording(false);
+          setAnalyser(null);
+        },
+        onStart: () => {
+          setIsRecording(true);
+          setError(null);
+          const a = iflytekRecorder.getAnalyser();
+          if (a) setAnalyser(a);
+        },
+        onEnd: () => {
+          setIsRecording(false);
+          setAnalyser(null);
+        },
+      });
+    } catch (error) {
+      console.error('Start recording error:', error);
+      setError('无法启动录音，请检查麦克风权限');
+      setIsRecording(false);
+    }
+  }, [isProcessing]);
+
+  // 停止录音
+  const stopRecording = useCallback(() => {
+    iflytekRecorder.stop();
+    setIsRecording(false);
+  }, []);
 
   // 添加用户消息
   const addUserMessage = useCallback((content: string) => {
@@ -171,6 +258,7 @@ export const AIPage: React.FC = () => {
 
   // 确认记账
   const handleTransactionConfirm = useCallback(async (messageId: string, parsed: ParsedTransaction) => {
+    setProcessingMessageId(messageId);
     try {
       // 查找分类
       let category;
@@ -221,15 +309,20 @@ export const AIPage: React.FC = () => {
           return;
         }
 
+        // 获取账户名称用于备注
+        const fromChannelName = channel.name;
+        const toChannelName = channels.find(c => c.id === toChannelId)?.name || '';
+
         // 创建转出记录
         await addRecord({
           amount: -transferAmount,
           categoryId: transferCategory.id,
           subCategoryId: transferOutSub.id,
           channelId: channel.id,
+          toChannelId: toChannelId,
           type: 'transfer',
           date: new Date(finalDate).toISOString(),
-          note: parsed.note,
+          note: parsed.note ? `转出至${toChannelName}-${parsed.note}` : `转出至${toChannelName}`,
         });
 
         // 创建转入记录
@@ -238,9 +331,10 @@ export const AIPage: React.FC = () => {
           categoryId: transferCategory.id,
           subCategoryId: transferInSub.id,
           channelId: toChannelId,
+          toChannelId: channel.id,
           type: 'transfer',
           date: new Date(finalDate).toISOString(),
-          note: parsed.note,
+          note: parsed.note ? `从${fromChannelName}转入-${parsed.note}` : `从${fromChannelName}转入`,
         });
       } else {
         // 支出/收入逻辑
@@ -257,12 +351,11 @@ export const AIPage: React.FC = () => {
       // 标记记账卡片为已确认
       markTransactionConfirmed(messageId);
 
-      // 添加成功消息
-      addAssistantMessage('记账成功！');
-
     } catch (error) {
       console.error('Confirm error:', error);
       alert('保存失败，请重试');
+    } finally {
+      setProcessingMessageId(null);
     }
   }, [categories, channels, addRecord, markTransactionConfirmed, addAssistantMessage]);
 
@@ -291,7 +384,7 @@ export const AIPage: React.FC = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-slate-100 flex flex-col">
       {/* 顶部栏 */}
-      <div className="fixed top-0 left-0 right-0 z-40 h-14 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-40 h-12 bg-gradient-to-b from-white via-slate-50/90 to-slate-100/40 border-b border-slate-200/50 shadow-[0_4px_20px_-3px_rgba(0,0,0,0.06)]">
         <div className="h-full max-w-2xl mx-auto px-4 flex items-center justify-between">
           {/* 返回按钮 */}
           <button
@@ -302,12 +395,7 @@ export const AIPage: React.FC = () => {
           </button>
 
           {/* 标题 */}
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-sm">
-              <Icon name="Sparkles" size={14} className="text-white" />
-            </div>
-            <span className="font-bold text-slate-800">AI 助手</span>
-          </div>
+          <span className="font-bold text-slate-800">AI 助手</span>
 
           {/* 占位 */}
           <div className="w-10" />
@@ -316,7 +404,7 @@ export const AIPage: React.FC = () => {
 
       {/* 对话区域 */}
       <div className="flex-1 pt-14">
-        <AIChatArea messages={messages} onConfirm={handleTransactionConfirm} onEdit={handleEdit} />
+        <AIChatArea messages={messages} onConfirm={handleTransactionConfirm} onEdit={handleEdit} processingMessageId={processingMessageId} />
       </div>
 
       {/* 底部输入区域 */}
@@ -324,19 +412,56 @@ export const AIPage: React.FC = () => {
         <div className="max-w-2xl mx-auto">
           {/* 输入区域 */}
           {inputMode === 'voice' ? (
-            <div className="flex flex-col items-center">
-              <button
-                onClick={() => setInputMode('text')}
-                className="mb-3 text-xs text-slate-400 hover:text-violet-500 transition-colors flex items-center gap-1"
-              >
-                <Icon name="Pencil" size={12} />
-                切换到文字输入
-              </button>
-              <AIVoiceRecorder
-                onConfirm={handleVoiceConfirm}
-                onCancel={() => {}}
-                disabled={isProcessing}
-              />
+            <div className="flex flex-col">
+              {/* 录音文本显示区域 - 开始录音后显示 */}
+              {isRecording && (
+                <div className="w-full mb-3 px-4 py-3 min-h-[48px] bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center">
+                  <p className="text-sm text-slate-700 leading-relaxed">{tempText || '等待录音...'}</p>
+                </div>
+              )}
+
+              {/* 底部三栏布局 */}
+              <div className="flex items-center gap-3">
+                {/* 切换按钮 */}
+                <button
+                  onClick={() => setInputMode('text')}
+                  className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:text-violet-500 hover:bg-slate-200 transition-colors shrink-0"
+                >
+                  <Icon name="Pencil" size={20} />
+                </button>
+
+                {/* 中间录音按钮 */}
+                <button
+                  onClick={isRecording ? stopRecording : startRecording}
+                  disabled={isProcessing}
+                  className={`
+                    flex-1 h-12 rounded-xl flex items-center justify-center transition-all
+                    ${isProcessing
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                      : isRecording
+                        ? 'bg-red-50 border-2 border-red-200'
+                        : 'bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 text-white shadow-md hover:opacity-90 active:scale-[0.98]'
+                    }
+                  `}
+                >
+                  {isRecording ? (
+                    <div className="w-full h-8 flex items-center justify-center">
+                      <SoundWaves analyser={analyser} />
+                    </div>
+                  ) : (
+                    <span className="text-sm font-medium text-white">开始录音</span>
+                  )}
+                </button>
+
+                {/* 发送按钮 */}
+                <button
+                  onClick={() => { if (isRecording) stopRecording(); handleVoiceConfirm(tempText); setTempText(''); }}
+                  disabled={!tempText || isProcessing}
+                  className="w-12 h-12 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 text-white rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 active:scale-95 transition-all shadow-md shrink-0"
+                >
+                  <Icon name="Send" size={20} />
+                </button>
+              </div>
             </div>
           ) : (
             <div className="flex items-center gap-3">

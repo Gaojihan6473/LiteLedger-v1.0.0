@@ -18,9 +18,10 @@ interface AIChatAreaProps {
   messages: Message[];
   onConfirm: (messageId: string, parsed: ParsedTransaction) => void;
   onEdit: (parsed: ParsedTransaction) => void;
+  processingMessageId?: string | null;
 }
 
-export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onEdit }) => {
+export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onEdit, processingMessageId }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 自动滚动到底部
@@ -40,7 +41,7 @@ export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onE
             <Icon name="Sparkles" size={32} className="text-violet-500" />
           </div>
           <p className="text-sm">开始语音或文字记账</p>
-          <p className="text-xs mt-1 opacity-60">按住底部按钮开始说话</p>
+          <p className="text-xs mt-1 opacity-60">点击底部按钮开始说话</p>
         </div>
       )}
 
@@ -88,6 +89,7 @@ export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onE
                   onConfirm={() => onConfirm(msg.id, msg.editedData || msg.parsedData!)}
                   onEdit={!msg.confirmed ? () => onEdit(msg.parsedData!) : undefined}
                   confirmed={msg.confirmed}
+                  isProcessing={processingMessageId === msg.id}
                 />
               )}
             </div>

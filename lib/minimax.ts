@@ -27,7 +27,6 @@ export interface ChannelInfo {
 // 解析 AI 返回的 JSON
 function parseAIResponse(text: string): ParsedTransaction | null {
   try {
-    console.log('AI response raw:', text);
 
     // 去除思考内容 （<think>...</think>）
     let cleaned = text.replace(/<think>[\s\S]*?<\/think>/gi, '');
@@ -36,15 +35,24 @@ function parseAIResponse(text: string): ParsedTransaction | null {
     // 去除 markdown 代码块
     cleaned = cleaned.trim().replace(/^```json\n?/, '').replace(/^```\n?/, '').replace(/\n?```$/, '').trim();
 
-    console.log('AI response cleaned:', cleaned);
 
     const parsed = JSON.parse(cleaned);
 
-    if (parsed.type && parsed.amount !== undefined && parsed.category && parsed.channel) {
+    // 字段名兼容：AI 可能返回中文 type 或驼峰 subCategory
+    const typeMapping: Record<string, string> = {
+      '支出': 'expense', 'expense': 'expense',
+      '收入': 'income', 'income': 'income',
+      '转账': 'transfer', 'transfer': 'transfer'
+    };
+
+    const rawType = parsed.type || parsed.Type;
+    const normalizedType = typeMapping[rawType] || rawType;
+
+    if (normalizedType && parsed.amount !== undefined && parsed.category) {
       let type: 'expense' | 'income' | 'transfer';
-      if (parsed.type === 'transfer') {
+      if (normalizedType === 'transfer') {
         type = 'transfer';
-      } else if (parsed.type === 'income') {
+      } else if (normalizedType === 'income') {
         type = 'income';
       } else {
         type = 'expense';
@@ -54,11 +62,11 @@ function parseAIResponse(text: string): ParsedTransaction | null {
         type,
         amount: parseFloat(parsed.amount) || '',  // 金额为空表示未识别
         category: parsed.category || '',           // 分类为空表示未识别
-        subCategory: parsed.subCategory || undefined,
-        channel: parsed.channel || '',            // 渠道为空表示未识别
-        toChannel: parsed.toChannel || undefined,
-        date: parsed.date || '',                   // 空字符串由前端处理默认今天
-        note: parsed.note || '',
+        subCategory: parsed.subCategory || parsed.subcategory || undefined,  // 兼容 subcategory
+        channel: parsed.channel || parsed.payment_method || '',             // 兼容 payment_method
+        toChannel: parsed.toChannel || parsed.to_channel || undefined,
+        date: parsed.date || parsed.time || '',    // 兼容 time 字段
+        note: parsed.note || (parsed.subCategory || parsed.subcategory ? (parsed.subCategory || parsed.subcategory) : ''),
       };
     }
   } catch (e) {
@@ -104,7 +112,7 @@ ${channelList}
 - type: 交易类型，只能是 expense、income 或 transfer 之一
 - amount: 金额（数字）
 - category: 支出/收入对应的分类（如餐饮、交通、工资等），转账类型填"转账"
-- subCategory: 二级分类（可选）
+- subCategory: 【重要】二级分类，必须从分类列表的二级分类中选择一个！不能自创词汇！"早饭"→"早餐"，"午饭"→"午餐"，"晚饭"→"晚餐"，"打的"→"打车"
 - channel: 【重要】账户/渠道名称
   - 支出时：支付渠道（如支付宝、微信）
   - 收入时：收款渠道（如银行卡、微信）
@@ -112,6 +120,25 @@ ${channelList}
 - toChannel: 【转账时必须填写】转入账户（钱转到哪里）
 - date: 日期，格式 YYYY-MM-DD（未提及则用今天：${getTodayDate()}）
 - note: 备注（仅包含转账说明之外的其他信息）
+
+【二级分类识别策略】（非常重要！）
+1. 信息简略时（如字数少于15字，或只说了大概消费项目如"吃早饭"、"买东西"）：
+   - 必须从分类的二级分类中选择最匹配的一个
+   - 示例："早上花了五块钱吃早饭" → subCategory="早餐"（如果有该二级分类），note=""
+   - 示例："买水果花了20" → subCategory="水果"（如果有该二级分类），note=""
+
+2. 信息丰富时（如字数大于等于15字，或有具体详细描述）：
+   - 可以从二级分类中选择模糊匹配的
+   - 将具体详细描述放到 note 中
+   - 示例："中午和同事一起在海底捞吃了顿火锅，花了200" → subCategory 可选"餐饮"，note="海底捞火锅"
+   - 示例："今天去超市买了些蔬菜和肉类" → subCategory 可选"生鲜"，note="超市蔬菜肉类"
+
+3. 常见二级分类参考（包含口语化表达，务必匹配）：
+   早餐/早饭、午餐/午饭、晚餐/晚饭、快餐、小吃、水果、生鲜、日用品、服装、居住、交通、医疗、教育、娱乐、通讯、打的/打车等
+   【重要】"早饭"="早餐"，"午饭"="午餐"，"晚饭"="晚餐"，"打的"="打车" 等口语化表达必须匹配到对应二级分类！
+   示例："早上花了五块钱吃早饭" → subCategory="早餐"（"早饭"是"早餐"的口语说法，必须匹配！），note=""
+   示例："打了个车花了30" → subCategory="打车"（"打的"="打车"），note=""
+   示例："买水果花了20" → subCategory="水果"，note=""
 
 【转账类型识别规则】（非常重要！）
 只要语音中提到两个账户之间的资金流动，就是转账：
@@ -142,13 +169,13 @@ ${channelList}
 正确输出：{"type":"transfer","amount":1000,"category":"转账","channel":"建设银行","toChannel":"农业银行","date":"${getTodayDate()}","note":""}
 
 用户说："今天早上吃饭花了50块钱，用微信支付的"
-正确输出：{"type":"expense","amount":50,"category":"餐饮","channel":"微信钱包","date":"${getTodayDate()}","note":"早上吃饭"}
+正确输出：{"type":"expense","amount":50,"category":"餐饮","subCategory":"早餐","channel":"微信钱包","date":"${getTodayDate()}","note":""}
 
 用户说："发工资了，3000块到账招商银行"
 正确输出：{"type":"income","amount":3000,"category":"工资","channel":"招商银行","date":"${getTodayDate()}","note":""}
 
 用户说："中午点了外卖花了35元，支付宝付款"
-正确输出：{"type":"expense","amount":35,"category":"餐饮","channel":"支付宝","date":"${getTodayDate()}","note":"中午外卖"}
+正确输出：{"type":"expense","amount":35,"category":"餐饮","subCategory":"午餐","channel":"支付宝","date":"${getTodayDate()}","note":"外卖"}
 
 用户说："房租2000用建设银行转账"
 正确输出：{"type":"expense","amount":2000,"category":"住房","channel":"建设银行","date":"${getTodayDate()}","note":"房租"}
@@ -160,7 +187,10 @@ ${channelList}
 正确输出：{"type":"income","amount":100,"category":"红包","channel":"","date":"${getTodayDate()}","note":"收红包"}
 
 用户说："买水果花了20"
-正确输出：{"type":"expense","amount":20,"category":"","channel":"","date":"${getTodayDate()}","note":"买水果"}
+正确输出：{"type":"expense","amount":20,"category":"餐饮","subCategory":"水果","channel":"","date":"${getTodayDate()}","note":""}
+
+用户说："早上花了五块钱吃早饭，用的微信"
+正确输出：{"type":"expense","amount":5,"category":"餐饮","subCategory":"早餐","channel":"微信钱包","date":"${getTodayDate()}","note":""}
 
 用户语音文本：${text}
 
