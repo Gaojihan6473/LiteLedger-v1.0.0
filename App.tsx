@@ -12,6 +12,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { UserAgreementPage } from './pages/UserAgreementPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { AIPage } from './pages/AIPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { useAuthStore } from './store/authStore';
 import { useStore } from './store';
@@ -75,6 +76,7 @@ const App: React.FC = () => {
         <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
         <Route path="/savings" element={<ProtectedRoute><SavingsPage /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+        <Route path="/ai" element={<ProtectedRoute><AIPage /></ProtectedRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<Navigate to="/" replace />} />

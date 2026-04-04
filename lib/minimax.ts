@@ -27,8 +27,17 @@ export interface ChannelInfo {
 // 解析 AI 返回的 JSON
 function parseAIResponse(text: string): ParsedTransaction | null {
   try {
-    // 尝试直接解析
-    const cleaned = text.trim().replace(/^```json\n?/, '').replace(/\n?```$/, '');
+    console.log('AI response raw:', text);
+
+    // 去除思考内容 （<think>...</think>）
+    let cleaned = text.replace(/<think>[\s\S]*?<\/think>/gi, '');
+    cleaned = cleaned.replace(/<think>[\s\S]*?/gi, '');
+
+    // 去除 markdown 代码块
+    cleaned = cleaned.trim().replace(/^```json\n?/, '').replace(/^```\n?/, '').replace(/\n?```$/, '').trim();
+
+    console.log('AI response cleaned:', cleaned);
+
     const parsed = JSON.parse(cleaned);
 
     if (parsed.type && parsed.amount !== undefined && parsed.category && parsed.channel) {
@@ -190,16 +199,31 @@ export async function analyzeTransaction(
         ],
         temperature: 0.3,
         max_tokens: 512,
+        thinking: {
+          enable: false,
+        },
       }),
     });
 
     if (!response.ok) {
       const error = await response.text();
       console.error('MiniMax API error:', error);
-      return null;
+      throw new Error(`API 请求失败: ${response.status}`);
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      const text = await response.text();
+      console.error('MiniMax JSON parse error:', text);
+      throw new Error('API 返回格式错误');
+    }
+
+    if (data.error) {
+      console.error('MiniMax API error:', data.error);
+      throw new Error(data.error.message || 'API 错误');
+    }
 
     if (data.choices && data.choices.length > 0) {
       const content = data.choices[0].message.content;
@@ -209,6 +233,6 @@ export async function analyzeTransaction(
     return null;
   } catch (error) {
     console.error('Analyze transaction error:', error);
-    return null;
+    throw error;
   }
 }

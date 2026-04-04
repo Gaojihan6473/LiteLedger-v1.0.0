@@ -10,6 +10,7 @@ import {
   eachDayOfInterval,
   isSameMonth,
   isSameDay,
+  isToday,
   addMonths,
   subMonths,
   parseISO,
@@ -84,9 +85,24 @@ const getSolarTerm = (month: number, day: number): string | null => {
   return null;
 };
 
+// 格式化日期标题
+const formatDateHeader = (date: Date): string => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const diffDays = Math.round((today.getTime() - target.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return '今天';
+  if (diffDays === 1) return '昨天';
+
+  const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  return `${date.getMonth() + 1}月${date.getDate()}日 ${weekDays[date.getDay()]}`;
+};
+
 export const CalendarPage: React.FC = () => {
-  const { records, getFilteredRecords } = useStore();
+  const { records, categories, channels, getFilteredRecords } = useStore();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
@@ -119,8 +135,26 @@ export const CalendarPage: React.FC = () => {
     return data;
   }, [records, getFilteredRecords]);
 
-  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  // 选中日期的记录
+  const selectedDateRecords = useMemo(() => {
+    if (!selectedDate) return [];
+    const dateKey = format(selectedDate, 'yyyy-MM-dd');
+    return getFilteredRecords()
+      .filter(r => r.date.split('T')[0] === dateKey)
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  }, [selectedDate, records, getFilteredRecords]);
+
+  // 日期点击处理
+  const handleDayClick = (day: Date) => {
+    if (selectedDate && isSameDay(day, selectedDate)) {
+      setSelectedDate(null);
+    } else {
+      setSelectedDate(day);
+    }
+  };
+
+  const nextMonth = () => { setCurrentDate(addMonths(currentDate, 1)); setSelectedDate(null); };
+  const prevMonth = () => { setCurrentDate(subMonths(currentDate, 1)); setSelectedDate(null); };
 
   const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
 
@@ -147,7 +181,7 @@ export const CalendarPage: React.FC = () => {
 
   return (
     <Layout activeTab="calendar" title="日历">
-      <div className="max-w-6xl mx-auto mt-4 md:mt-6">
+      <div className="max-w-6xl mx-auto mt-4 md:mt-6 pb-6">
 
         {/* Calendar Container */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-6">
@@ -196,11 +230,14 @@ export const CalendarPage: React.FC = () => {
               return (
                 <div
                   key={day.toString()}
+                  onClick={() => isCurrentMonth && handleDayClick(day)}
                   className={`
                     min-h-[68px] md:min-h-[90px] p-1 md:p-2 border-b border-r border-slate-100 relative
                     ${!isCurrentMonth ? 'bg-slate-50/30' : 'bg-white'}
                     ${idx % 7 === 6 ? 'border-r-0' : ''}
                     ${isToday ? 'bg-blue-50/50' : ''}
+                    ${selectedDate && isSameDay(day, selectedDate) ? 'ring-1 ring-blue-300 ring-inset bg-blue-50/30' : ''}
+                    ${isCurrentMonth ? 'cursor-pointer hover:bg-slate-50' : ''}
                   `}
                 >
                   {/* 顶部：日期数字 + 节日/节气 */}
@@ -246,6 +283,104 @@ export const CalendarPage: React.FC = () => {
             })}
           </div>
         </div>
+
+        {/* 选中日期的账单明细 */}
+        {selectedDate && (
+          <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-200">
+            {/* 日期标题 */}
+            <div className="flex items-center justify-between mb-2 px-2">
+              <div className="flex items-center gap-2">
+                <span className="text-base font-bold text-slate-700">
+                  {formatDateHeader(selectedDate)}
+                </span>
+                {selectedDateRecords.length > 0 && (
+                  <div className="flex gap-2 text-[10px] sm:text-xs">
+                    {selectedDateRecords.filter(r => r.type === 'income' || (r.type === 'transfer' && r.subCategoryId === '转入')).reduce((sum, r) => sum + r.amount, 0) > 0 && (
+                      <span className="text-green-600 font-medium bg-green-50 px-1.5 py-0.5 rounded">
+                        收 +{selectedDateRecords.filter(r => r.type === 'income' || (r.type === 'transfer' && r.subCategoryId === '转入')).reduce((sum, r) => sum + r.amount, 0).toFixed(2)}
+                      </span>
+                    )}
+                    {selectedDateRecords.filter(r => r.type === 'expense' || (r.type === 'transfer' && r.subCategoryId === '转出')).reduce((sum, r) => sum + r.amount, 0) > 0 && (
+                      <span className="text-slate-600 font-medium bg-slate-100 px-1.5 py-0.5 rounded">
+                        支 -{selectedDateRecords.filter(r => r.type === 'expense' || (r.type === 'transfer' && r.subCategoryId === '转出')).reduce((sum, r) => sum + r.amount, 0).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setSelectedDate(null)}
+                className="p-1 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <Icon name="X" size={16} />
+              </button>
+            </div>
+
+            {/* 记录列表 */}
+            {selectedDateRecords.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 text-center">
+                <p className="text-slate-400">当天暂无账单记录</p>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                {selectedDateRecords.map((record, index) => {
+                  const category = categories.find(c => c.id === record.categoryId);
+                  const channel = channels.find(c => c.id === record.channelId);
+                  const subCategory = category?.subCategories?.find(sc => sc.id === record.subCategoryId);
+                  const isTransfer = record.type === 'transfer';
+                  const isTransferIn = isTransfer && subCategory?.name === '转入';
+
+                  return (
+                    <div
+                      key={record.id}
+                      className={`flex items-center justify-between p-3 sm:p-4 ${
+                        index !== selectedDateRecords.length - 1 ? 'border-b border-slate-50' : ''
+                      }`}
+                    >
+                      {/* 左侧: 图标 + 分类 + 备注 */}
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div
+                          className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center bg-slate-100 flex-shrink-0"
+                          style={{
+                            backgroundColor: isTransfer ? '#f3e8ff' : (category?.color ? `${category.color}15` : undefined),
+                            color: isTransfer ? '#9333ea' : category?.color
+                          }}
+                        >
+                          <Icon name={isTransfer ? 'ArrowLeftRight' : (category?.iconName || 'CircleDashed')} size={16} strokeWidth={2.5} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm sm:text-base font-semibold text-slate-900 truncate">
+                            {isTransfer ? (subCategory?.name || '未知') : (category?.name || '未知')}
+                          </div>
+                          {record.note && (
+                            <div className="text-[10px] sm:text-xs text-slate-400 truncate">
+                              {record.note}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 右侧: 渠道 + 金额 (无编辑按钮) */}
+                      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 ml-2">
+                        {channel && (
+                          <div className="flex items-center gap-1">
+                            <div className="w-1 h-1 rounded-full" style={{ backgroundColor: channel.color }}></div>
+                            <span className="text-[9px] sm:text-[10px] font-medium text-slate-400">{channel.name}</span>
+                          </div>
+                        )}
+                        <span className={`text-sm sm:text-base font-bold tabular-nums ${
+                          record.type === 'income' || isTransferIn ? 'text-green-600' : 'text-slate-900'
+                        }`}>
+                          {(record.type === 'income' || isTransferIn) ? '+' : '-'}{Math.abs(record.amount).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </Layout>
   );

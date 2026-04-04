@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { Button } from '../components/Button';
 import { Icon } from '../components/Icon';
@@ -135,6 +136,7 @@ export const EntryPage: React.FC = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const { categories, channels, addRecord, addCategory, deleteCategory, deleteSubCategory, reorderCategories, getChannelBalance } = useStore();
+  const navigate = useNavigate();
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -394,7 +396,7 @@ export const EntryPage: React.FC = () => {
   };
 
   return (
-    <Layout activeTab="entry" title="记账" showAIVoiceButton={true} onAIVoiceClick={() => setShowAIVoiceModal(true)}>
+    <Layout activeTab="entry" title="记账" showAIVoiceButton={true} onAIVoiceClick={() => navigate('/ai')}>
       <div className="max-w-6xl mx-auto md:h-[calc(100vh-6rem)] flex flex-col pb-6 md:pb-0">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full">
           

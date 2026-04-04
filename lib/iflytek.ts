@@ -62,11 +62,17 @@ async function generateWsUrl(): Promise<string> {
   const host = 'iat.xf-yun.com';
   const date = getRFC1123Date();
 
+  console.log('========== iFlytek 鉴权调试 ==========');
+  console.log('APPID:', APPID);
+  console.log('APIKEY:', APIKEY);
+  console.log('APISECRET:', APISECRET);
+  console.log('DATE:', date);
+
   // 1. 生成 signature_origin
   const requestLine = 'GET /v1 HTTP/1.1';
   const signatureOrigin = `host: ${host}\ndate: ${date}\n${requestLine}`;
 
-  console.log('Signature origin:', signatureOrigin);
+  console.log('Signature origin:\n', signatureOrigin);
 
   // 2. 使用 HMAC-SHA256 签名
   const signature = await hmacSha256(APISECRET, signatureOrigin);
@@ -74,14 +80,17 @@ async function generateWsUrl(): Promise<string> {
 
   // 3. 生成 authorization_origin
   const authorizationOrigin = `api_key="${APIKEY}", algorithm="hmac-sha256", headers="host date request-line", signature="${signature}"`;
+  console.log('Authorization origin:\n', authorizationOrigin);
 
   // 4. Base64 编码得到 authorization
   const authorization = btoa(authorizationOrigin);
-  console.log('Authorization:', authorization);
+  console.log('Authorization (base64):', authorization);
 
   // 5. 拼接 URL
   const wsUrl = `${WS_URL}?authorization=${encodeURIComponent(authorization)}&date=${encodeURIComponent(date)}&host=${encodeURIComponent(host)}`;
-  console.log('WebSocket URL:', wsUrl);
+  console.log('Final WebSocket URL:', wsUrl);
+  console.log('=====================================');
+
   return wsUrl;
 }
 
@@ -176,11 +185,16 @@ export class IflytekRecorder {
     this.callbacks = callbacks;
     this.seq = 0;
 
+    console.log('========== IflytekRecorder.start() 开始 ==========');
+
     try {
       // 1. 先生成 WebSocket URL
+      console.log('Step 1: 生成 WebSocket URL...');
       this.wsUrl = await generateWsUrl();
+      console.log('Step 1 完成, URL:', this.wsUrl);
 
       // 2. 获取麦克风权限
+      console.log('Step 2: 获取麦克风权限...');
       this.audioStream = await navigator.mediaDevices.getUserMedia({
         audio: {
           sampleRate: 16000,
@@ -220,11 +234,16 @@ export class IflytekRecorder {
       this.scriptProcessor.connect(this.audioContext.destination);
 
       // 4. 连接 WebSocket
+      console.log('Step 3: 连接 WebSocket...');
       this.connectWebSocket();
+      console.log('Step 3 调用完成');
 
       this.callbacks.onStart?.();
+      console.log('IflytekRecorder.start() 完成');
     } catch (error) {
-      console.error('Failed to start recording:', error);
+      console.error('========== IflytekRecorder.start() 异常 ==========');
+      console.error('Error:', error);
+      console.error('================================================');
       this.callbacks.onError?.('无法获取麦克风权限');
       throw error;
     }
@@ -310,17 +329,25 @@ export class IflytekRecorder {
   }
 
   private connectWebSocket(): void {
+    console.log('========== WebSocket 连接调试 ==========');
+    console.log('Connecting to:', this.wsUrl);
+    console.log('WebSocket state before connect:', this.ws?.readyState);
+
     this.ws = new WebSocket(this.wsUrl);
 
+    console.log('WebSocket created, readyState:', this.ws.readyState);
+
     this.ws.onopen = () => {
-      console.log('WebSocket connected');
+      console.log('WebSocket onopen fired - CONNECTED!');
+      console.log('WebSocket readyState:', this.ws?.readyState);
       this.isConnected = true;
     };
 
     this.ws.onmessage = (event) => {
+      console.log('WebSocket onmessage received, data:', event.data);
       try {
         const data = JSON.parse(event.data);
-        console.log('WebSocket message:', JSON.stringify(data));
+        console.log('WebSocket message parsed:', JSON.stringify(data));
 
         // 检查错误
         if (data.header?.code !== 0) {
@@ -357,12 +384,19 @@ export class IflytekRecorder {
     };
 
     this.ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.error('========== WebSocket onerror ==========');
+      console.error('WebSocket error event:', error);
+      console.error('WebSocket readyState at error:', this.ws?.readyState);
+      console.error('WebSocket URL:', this.ws?.url);
+      console.error('======================================');
       this.callbacks.onError?.('WebSocket连接失败，请检查网络或API配置');
     };
 
     this.ws.onclose = (event) => {
-      console.log('WebSocket closed', event.code, event.reason);
+      console.log('========== WebSocket onclose ==========');
+      console.log('WebSocket closed, code:', event.code, 'reason:', event.reason);
+      console.log('WebSocket readyState at close:', this.ws?.readyState);
+      console.log('======================================');
       this.isConnected = false;
     };
   }
