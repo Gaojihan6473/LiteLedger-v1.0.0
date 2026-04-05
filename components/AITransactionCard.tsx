@@ -6,6 +6,7 @@ interface AITransactionCardProps {
   data: ParsedTransaction;
   onConfirm: () => void;
   confirmed?: boolean;
+  isProcessing?: boolean;
   editedData?: ParsedTransaction;
   onEdit?: () => void;
 }
@@ -14,6 +15,7 @@ export const AITransactionCard: React.FC<AITransactionCardProps> = ({
   data,
   onConfirm,
   confirmed,
+  isProcessing,
   editedData,
   onEdit,
 }) => {
@@ -131,17 +133,24 @@ export const AITransactionCard: React.FC<AITransactionCardProps> = ({
           e.stopPropagation(); // 阻止冒泡到卡片
           onConfirm();
         }}
-        disabled={confirmed}
+        disabled={confirmed || isProcessing}
         className={`w-full mt-5 h-11 font-medium rounded-xl transition-all flex items-center justify-center gap-2 shadow-md ${
           confirmed
             ? 'bg-slate-100 text-slate-400 cursor-default'
-            : 'bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 text-white hover:opacity-90 active:scale-[0.98]'
+            : isProcessing
+              ? 'bg-slate-200 text-slate-400 cursor-wait'
+              : 'bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 text-white hover:opacity-90 active:scale-[0.98]'
         }`}
       >
         {confirmed ? (
           <>
             <Icon name="Check" size={18} />
             已完成
+          </>
+        ) : isProcessing ? (
+          <>
+            <Icon name="Loader2" size={18} className="animate-spin" />
+            记账中
           </>
         ) : (
           <>
