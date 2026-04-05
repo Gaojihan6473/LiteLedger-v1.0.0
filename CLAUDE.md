@@ -75,11 +75,46 @@ interface Channel {
 - `components/EditTransactionModal.tsx` - 编辑交易弹窗
 - `components/PageTransition.tsx` - 页面过渡动画
 
+## AI 语音记账功能
+
+### 核心文件
+
+| 文件 | 说明 |
+|------|------|
+| `pages/AIPage.tsx` | AI 助手页面，语音/文字记账入口 |
+| `lib/minimax.ts` | MiniMax API 调用，解析语音为结构化交易 |
+| `lib/iflytek.ts` | 科大讯飞实时语音转写（WebSocket） |
+| `components/AIChatArea.tsx` | 对话区域，显示消息和记账卡片 |
+| `components/AITransactionCard.tsx` | 记账卡片，显示 AI 解析结果 |
+| `components/AIEditModal.tsx` | 编辑弹窗，确认/修改 AI 解析结果 |
+| `components/AIVoiceRecorder.tsx` | 录音组件 |
+| `components/AIVoiceRecordingModal.tsx` | 录音确认弹窗 |
+
+### 数据流
+
+1. 用户语音 → iFlytek 实时转写 → AIVoiceRecordingModal
+2. 转写文本 → MiniMax API `analyzeTransaction()` → `ParsedTransaction`
+3. `ParsedTransaction` → `AITransactionCard` 显示 → 用户确认
+4. 确认后 → `handleTransactionConfirm()` → `addRecord()` → 数据库
+
+### 转账记录特殊处理
+
+**转账创建（AIPage.tsx）**：创建两条记录
+- 转出：amount 负数，note 格式 `转出至${账户名}`
+- 转入：amount 正数，note 格式 `从${账户名}转入`
+
+**转账显示（EditTransactionModal.tsx）**：通过解析 note 获取对手方账户
+- 转入记录：匹配 `^从(.+?)转入`
+- 转出记录：匹配 `^转出至(.+?)(?:-|：|$)`
+
+修改转账相关代码时需注意两侧一致性。
+
 ## 开发注意事项
 
 1. **用户隔离**: 所有 API 调用必须传入 `userId`
 2. **先更新远程**: 所有数据操作先更新 Supabase，成功后更新本地状态
 3. **实时订阅**: 在 `initData()` 设置，`cleanup()` 清理
+4. **AI 解析字段兼容**: AI 可能返回中文 type、subcategory（而非 subCategory）、payment_method（而非 channel）、to_channel（而非 toChannel）
 
 ## PWA 支持
 

@@ -87,7 +87,7 @@ export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onE
                   data={msg.parsedData}
                   editedData={msg.editedData}
                   onConfirm={() => onConfirm(msg.id, msg.editedData || msg.parsedData!)}
-                  onEdit={!msg.confirmed ? () => onEdit(msg.parsedData!) : undefined}
+                  onEdit={!msg.confirmed ? () => onEdit(msg.editedData || msg.parsedData!) : undefined}
                   confirmed={msg.confirmed}
                   isProcessing={processingMessageId === msg.id}
                 />

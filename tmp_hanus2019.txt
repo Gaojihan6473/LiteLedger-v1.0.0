@@ -1,0 +1,762 @@
+      Journal of Interactive Advertising
+
+
+
+
+      ISSN: 1525-2019 (Online) Journal homepage: www.tandfonline.com/journals/ujia20
+
+
+
+
+Distinguishing User Experience When
+Customizing in a User-Generated Content
+Advertising Campaign and Subsequent Eﬀects
+on Product Attitudes, Reactance, and Source
+Credibility
+
+Michael D. Hanus
+
+To cite this article: Michael D. Hanus (2019) Distinguishing User Experience When Customizing
+in a User-Generated Content Advertising Campaign and Subsequent Eﬀects on Product
+Attitudes, Reactance, and Source Credibility, Journal of Interactive Advertising, 19:1, 74-85, DOI:
+10.1080/15252019.2018.1548316
+
+To link to this article: https://doi.org/10.1080/15252019.2018.1548316
+
+
+
+
+       Published online: 18 Mar 2019.
+
+
+
+       Submit your article to this journal
+
+
+
+       Article views: 1534
+
+
+
+       View related articles
+
+
+
+       View Crossmark data
+
+
+
+       Citing articles: 3 View citing articles
+
+
+
+
+                      Full Terms & Conditions of access and use can be found at
+             https://www.tandfonline.com/action/journalInformation?journalCode=ujia20
+JOURNAL OF INTERACTIVE ADVERTISING
+2019, VOL. 19, NO. 1, 74–85
+https://doi.org/10.1080/15252019.2018.1548316
+
+
+
+
+Distinguishing User Experience When Customizing in a User-Generated
+Content Advertising Campaign and Subsequent Effects on Product Attitudes,
+Reactance, and Source Credibility
+Michael D. Hanus
+Department of Advertising and Public Relations, University of Nebraska–Lincoln, Lincoln, Nebraska, USA
+
+
+   ABSTRACT                                                                                                             KEYWORDS
+   Advertising campaigns with user-generated content (UGC) vary in the extent to which they                             User-generated content;
+   guide or allow user freedom when creating content. It is possible that providing preexisting                         advertising; customization;
+   content that users must change or edit might shape attitudes toward that content and its                             persuasion; reactance
+   source in ways different from those campaigns that give freedom to create content as users
+   see fit. In this study, users created a new advertisement, customized an advertisement, or
+   read an existing advertisement. They then rated their perceptions on interactivity, auton-
+   omy, competence, attachment, reactance, source credibility, and product liking. Results indi-
+   cate that customizers had higher reactance and lower product liking compared to creators,
+   suggesting that a guiding template or other preexisting material can significantly change
+   attitudes despite similar tasks. Advertisers should consider the benefits of campaigns that
+   call for creation versus customization and strongly consider impressions from preexisting
+   content on interactive customizable interfaces.
+
+
+
+
+The Internet and Web 2.0 technologies have greatly                             professionally produced content (Comscore 2012). In
+increased the ability of users to have an active role in                       one notable example, Chobani attributes a 225.9%
+creating and distributing content. There are abundant                          increase in revenue in one year to using a campaign
+sites and platforms that facilitate user-generated con-                        showcasing UGC on billboards, websites, and social
+tent (UGC), defined as “media content created or pro-                          media (Elliott 2011). To date, academic research on
+duced by the general public” (Daugherty, Eastin, and                           UGC-centered campaigns has focused on the potential
+Bright 2008, p. 3). UGC comes in a variety of forms,                           and positive persuasive outcomes that stem from
+including videos (e.g., YouTube), social media posts                           viewing UGC; consumers are more likely to trust and
+(e.g., Facebook), blogs (e.g., WordPress), and reviews                         pay attention to persuasive messages that are gener-
+(e.g., Yelp). While the given influence of any particu-                        ated by a peer rather than those that come directly
+lar platform might shift with cultural preference, it is                       from a brand (e.g., Krishnamurthy and Dou 2008).
+likely that UGC-oriented platforms will continue to                            Yet little focus has been given to experience of the
+rise in popularity (Muniz and Schau 2007).                                     users who are actually creating content. Users who
+   Faced with a digital landscape that places the user                         create UGC drive the campaigns and are experiencing
+as an active creator rather than passive recipient, the                        a variety of persuasive and psychological benefits dur-
+advertising industry has worked to adapt traditional                           ing the creation process as they shift from a passive
+one-to-many mass communication campaigns to cam-                               recipient to an active source of information (Sundar
+paigns that are increasingly interactive with consum-                          2008). It is important to explore and understand the
+ers (Christodoulides 2009). There is enormous                                  psychological process of the UGC creator so that
+potential in UGC campaigns: UGC advertisements                                 advertisers will be able to better tailor the UGC
+result in 29% higher Web conversions (Morrison                                 experience to the user’s needs.
+2016) and are seen to have greater emotional intensity                            The use of the consumer as an active creator in the
+and to better relay key message communication than                             advertising process is relatively new, and agencies and
+
+CONTACT Michael D. Hanus         mhanus2@unl.edu        Department of Advertising and Public Relations, University of Nebraska-Lincoln, 307 Andersen Hall,
+P.O. Box 880443, Lincoln, NE 68588, USA.
+Michael D. Hanus (PhD, The Ohio State University) is an assistant professor in the College of Journalism and Mass Communication, Department of
+Advertising and Public Relations, University of Nebraska–Lincoln.
+ß 2019 American Academy of Advertising
+                                                                              JOURNAL OF INTERACTIVE ADVERTISING    75
+
+
+brands continue to experiment with the best ways to        accompanying picture; the brand’s presence in the
+involve the consumer while retaining key brand ele-        submission site is much stronger and may elicit
+ments and messaging (Christodoulides 2009). It is a        greater feelings of reactance for users (Brehm and
+difficult balance: Restricting consumer participation      Brehm 1981). So it becomes important for brands
+allows for a more carefully controlled campaign but        providing guidelines or structure in their UGC cam-
+runs counter to the freedom or voice which many            paigns to understand the difference between giving
+consumers increasingly expect (and which competing         some instruction and giving the perception that the
+brands may be offering). On the other hand, increased      consumer is being pushed by a “guiding hand” to
+freedom to create content and interact with the brand      interact with the brand.
+brings the risk of consumers going off-message or             This study focuses on the user’s experience during
+potentially opens the door for brand criticism.            content generation within a structured branded call
+   Take, for example, the Lay’s “Do Us a Flavor” con-      for UGC and how this experience affects the user’s
+test, which was launched in 2012. Users are invited to     perceptions of persuasive messaging. More specifically,
+propose a new flavor for Lay’s chips via an online         individuals could have different experiences depending
+portal where they can customize the name of the fla-       on the amount of freedom or restriction they perceive
+vor, bag color, and, to some extent, the picture that      when assessing a call for UGC. We hypothesize that
+accompanies the flavor. Eventually, flavor submissions     the presence of predetermined content from the brand
+are judged, with the top three entries voted on by         (e.g., a template or an example post) runs the risk of
+consumers. Lay’s then creates the three most popular       eliciting greater psychological reactance to the message
+flavors, distributes them throughout the United States,    and the brand compared a brand that gives few guide-
+and allows users to taste and vote for a winning fla-      lines and gives leaves freedom of creation up to the
+vor. The campaign was (and continues to be) a mas-         individual. For example, users have taken to changing
+sive success, receiving millions of entries, and is seen   their profile pictures to support a political message,
+as “the most successful engagement program in              such as placing a rainbow filter over their profile pic-
+Global Lay’s history” (Bagnull 2016). In addition,         tures to support LGBTQ þ rights (Gottfried, Barthel,
+users have created thousands of videos featuring their     and Shearer 2016). In this case, the filter is an element
+own taste-tests of the new chip flavors, bringing in       of content, predetermined by the message creator,
+millions of views to their own channels. The “Do Us        which restricts user freedom. Instead of crafting their
+a Flavor” campaign features different types of UGC:        profile pictures in ways that they feel best represent
+The website customization portal is structured by the      their support of the cause, users are restricted to using
+brand and allows consumers to design the bag of            or not using the filter. It is possible that a general call
+chips within certain parameters, whereas the video         to edit one’s profile in any way one chooses could
+taste-tests are unsolicited by the brand and are created   elicit greater freedom and increase the psychological
+by passionate consumers for other consumers.               benefits of feeling in control and connected to the
+Although brands receive a lot of value from the            message. In other words, the filter’s presence in com-
+unsolicited UGC, structured calls within the branded       bination with the call for action may create stronger
+context for UGC are a better opportunity to kickstart      perceptions of a “guiding hand” pointing one in a
+a new campaign and still align with brand principles       specific direction and restricting one’s freedom. Users
+(Burmann 2010).                                            who customize content with the perception of being
+   By all standards, the Lay’s website submission sys-     directed will have different perceptions of attachment
+tem and overall campaign was successful, but it is         to the message, source credibility, psychological react-
+possible that the inherent structure of the system         ance, and product liking compared to those who cre-
+turned away some potential consumers. The psycho-          ate content with more freedom of self-expression.
+logical benefits that stem from interactive media such
+as UGC platforms include perceptions of freedom and
+                                                           Content Customization
+autonomy, and with them a lack of the perception
+that one is being told what to do (Tamborini et al.        Customization, or the ability to actively influence
+2010). Users creating the taste-test videos have com-      media content (Kang and Sundar 2016), is an enjoy-
+plete freedom to create the video as they so choose,       able and engaging process used across a number of
+post it where they will, and structure it in any way       media. Users who customize report increased percep-
+they like. But users of the website submission platform    tions of involvement, relevance, interactivity
+are restricted to the type of chip, chip flavor, and       (Kalyanaraman and Sundar 2006), immersion
+76     M. D. HANUS
+
+
+satisfaction, game loyalty (Teng 2010), and identifica-     edit text, the ability to draw or annotate, or the ability
+tion (Schmierbach, Limperos, and Woolley 2012).             to add sound effects). Perceptions related to UGC
+Customization increases intrinsic motivation (Hanus         (whether it is customization or creation) can broadly
+and Fox 2015) and perceptions of control and identity       be categorized into those revolving around the
+(Sundar 2008); decreases counterarguing against a per-      medium (e.g., is it interactive, does using it fulfill key
+suasive message; improves product attitudes (Hanus          needs) and those revolving around the message (e.g.,
+and Fox 2017); and shifts users toward an advocated         is it persuasive, is it appealing). Because the process of
+viewpoint (Kang and Sundar 2016). Users who can             customization and creation is so similar (e.g., pushing
+influence the appearance of a digital persuasive source     keys, writing words), medium perceptions should be
+(e.g., a virtual salesperson) gain more positive atti-      similar between the two processes. It is in perceptions
+tudes toward the product (Hanus and Fox 2015,               related to the message where the differences between
+2017); and users who customize a web portal are             customization and creation should theoretically occur.
+more likely to agree with advocated messages read
+within that portal (Kang and Sundar 2016).
+                                                            Interactive Media Perceptions
+    These studies demonstrate that customization can
+have positive persuasive outcomes, yet these studies        The process of advertisement content customization
+allow for customization indirectly, by influencing the      or creation requires the user to simultaneously inter-
+source or portal, rather than directly changing the         act with the medium and to interact with the message.
+message itself. Companies are increasingly allowing         Medium interactivity (i.e., structural interactivity; Liu
+users to more directly customize products, brands,          and Shrum 2002) is characterized by using the
+and experiences. For example, brands Kellogg’s and          medium as a tool; users navigate and influence via the
+Marvel have each created interactive advertisements in      medium’s interface. In the Kellogg’s adult-coloring
+the Recolor adult-coloring smartphone application.          app example, users must figure out how to select col-
+Instead of being shown a short video or static adver-       ors, place them on the picture, erase mistakes, and
+tisement while using the app, users are given pictures      navigate the interface.
+of Pop-Tarts or Spider-Man that they can color as              Medium interactivity increases psychological per-
+they please. In this case, users have the ability to cus-   ceptions that have been linked to positive attitudes
+tomize a persuasive message in a way that they              and increased persuasive outcomes (Tamborini et al.
+choose. This approach has resulted in higher engage-        2010). Perceived interactivity, or the extent to which
+ment and advertisement viewing time (Liffreing 2018).       one sees the medium as interactive (Liu and Shrum
+    However, it is possible that there are key differen-    2002), increases user satisfaction, perceptions of trust
+ces between types of customization. Customization in        in websites (Hu et al. 2010), ratings of website effect-
+a UGC campaign that provides few restrictions should        iveness (Song and Zinkhan 2008), and video game
+elicit less resistance to a persuasive attempt than cus-    enjoyment (Klimmt, Hartmann, and Frey 2007).
+tomization that requires strict guidelines, limits          Perceived autonomy, the perception that one’s actions
+choices, or provides the perception of one’s freedoms       stem from an internal locus of desire, and perceived
+being restricted. For the sake of clarity, we refer to      competence, the perception that one has the ability to
+these differences as those between content creation         show mastery and demonstrate concrete outcomes,
+(i.e., individuals responding to a call with freedom in     are core psychological needs linked with a number of
+how they respond) and content customization (i.e.,          positive outcomes from increased self-esteem to
+individuals responding to a call featuring preexisting      increased task enjoyment (Deci and Ryan 2000; Ryan
+material which is consulted, changed, edited, or which      and Deci 2000).
+influences the user).                                          Medium interactivity perceptions should be the
+    Both content customization and content creation         same for both customizers and creators as they both
+are similar in that they give users agency to influence     have access to the same interface affordances (e.g., in
+content, placing the user as the source of new infor-       the coloring app, users who color an existing picture
+mation (Sundar 2008). Both are similar in that they         or draw one of their own would have access to the
+each require time, attention, and effort from the user      same interface tools). However, interactive media
+in a way that distinguishes interactive media from          should positively influence user perceptions more
+traditionally passive media, such as television and         than noninteractive media. In other words, an inter-
+radio. In addition, both categories are constrained by      active media interface results in greater persuasive
+the medium’s affordances (e.g., the ability to write or     outcomes compared to a noninteractive interface even
+                                                                               JOURNAL OF INTERACTIVE ADVERTISING      77
+
+
+when keeping the message constant (Hanus and Fox             must contend with the original source, and custom-
+2015, 2017). This study attempts to replicate findings       ized content will never fully belong to the customizer.
+linking interactive media use and perceived interactiv-      As a result, content customizers should rate the mate-
+ity, autonomy, and competence to demonstrate the             rial’s original source less positively than a content cre-
+benefits of interactive media in the advertising space.      ator would, because the content creator is the original
+  H1: Individuals who customize will show no                 source. Furthermore, we predict that the tension
+  difference in (a) perceived interactivity, (b) autonomy,   between customizer and original source should result
+  or (c) competence compared to those who create, but        in lower original source perceptions compared to one
+  both will score higher than those in a read-only
+                                                             who does not interact with the message and only
+  control condition.
+                                                             reads it. The reader will create source perceptions
+                                                             based on the material (Vazire and Gosling 2004), but
+Interactive Message Perceptions                              there will be no tension over ownership of
+                                                             that material.
+Source Perceptions
+                                                               H2: Individuals who create will show the highest
+In contrast to perceptions related to using the inter-         source credibility scores compared to those who read,
+active medium’s interface, perceptions related to inter-       and those who read will show higher scores than
+acting with message content should differ between              those who customize.
+users who customize and users who create. This dif-
+ference may be due to the influence of preexisting
+content for customizers. Preexisting content might           Attachment
+influence users in a number of ways, from providing          We propose to test three variables that relate to one’s
+implicit norms on style (e.g., users should write in         perceptions of an advertisement: one’s attachment to
+long sentences) to making a user feel insecure (e.g., “I     the advertisement, one’s reactance against the adver-
+could never write as well as what’s already here”).          tisement, and one’s liking of the advertisement’s
+One significant form of influence might be percep-           product. Attachment is the extent to which a con-
+tions of the preexisting content’s source, defined as        sumer feels an emotional bond with a specific
+one’s perceptions of the source’s personality, values,       product (Schifferstein and Zwartkruis-Pelgrim 2008).
+and beliefs. Users should be less likely to attribute a
+                                                             Attachment has been shown to increase engagement
+source to the medium’s interface (e.g., a website
+                                                             (Sundar 2008) and indirectly influence reactance and
+coder) than to focus on the source of a message (e.g.,
+                                                             product attitudes (Hanus and Fox 2017). Individuals
+a news article’s writer).
+                                                             who feel strongly attached to a product are less likely
+   The preexisting content present during customiza-
+                                                             to dispose of the product and more likely to experi-
+tion implicitly creates the perception of an original
+                                                             ence emotional loss if the product is lost. Interacting
+author. Users have shown the ability to create accur-
+ate impressions of a source based on minimal infor-          with content, whether creating or customizing, creates
+mation (Blackman and Funder 1998) or through a               a strong bond with the content, as the content is
+digital space such as a website (Vazire and Gosling          shaped to the user’s preferences. Each change made to
+2004). These perceptions are impactful; studies have         content is a reflection of the user’s decision making,
+shown that perceptions of a source can influence per-        resulting in a strong user bond with the created or
+ceptions about the source’s message (Sternthal,              customized content.
+Dholakia, and Leavitt 1978; Wilson and Sherrell                 However, preexisting material may influence
+1993). Viewing a source as more credible can lead to         attachment to material. Customizers may have a
+more positive perceptions of the source’s message            harder time bonding with material that is not origin-
+(Chaiken 1980) and influence content evaluations of          ally their own. Even though customizers change con-
+websites (Bente, Baptist, and Leuschner 2012).               tent, any material that must be included tells the users
+   As users customize, they gather perceptions of the        that this work does not entirely belong to them. As a
+content’s source. Then they must change that content,        result, attachment should not be as strong for custom-
+effectively placing themselves as a source of content        izers compared to creators.
+along with the original creator. In contrast, a content        H3: Individuals who create content will show
+creator is the sole source of content. We hypothesize          stronger attachment to content compared to those
+that the perceptions of the original source will create        who customize, and those who customize will be
+a tension with a content customizer. The customizer            more attached than those who only read the content.
+78       M. D. HANUS
+
+
+Psychological Reactance                                    those in the create or read condition. In this case, pre-
+                                                           existing content could create negative perceptions
+When considering persuasive message design, it is
+                                                           compared even to those who just read an existing
+important to consider an individual’s resistance to
+                                                           advertisement. A confirmation of this hypothesis will
+persuasive attempts. Whenever people perceive a
+                                                           best demonstrate the strong difference between cus-
+threat to their freedom they are motivated to restore
+                                                           tomization and creation conditions, despite the very
+that freedom; this motivation is referred to as react-
+                                                           similar goals and interactive affordances. More than
+ance (Brehm 1966; Brehm and Brehm 1981).
+                                                           anything, this finding will illustrate how preexisting
+Reactance has been demonstrated to reduce or reverse
+                                                           content can strongly alter final product perceptions.
+the intended impact of persuasive messages in con-
+texts such as politics (Brehm and Brehm 1981), organ         H5: Individuals who create an advertisement will
+donation (Reinhart et al. 2007) and anti-smoking             show the highest product liking scores, followed by
+                                                             individuals who read an advertisement and then
+(Niederdeppe et al. 2005).
+                                                             individuals who customize the advertisement.
+    Interactive media provide opportunities to reduce
+reactance. An interactive medium that hides a persua-
+sive message within may distract individuals from the      Method
+message by giving them other tasks and stimuli to
+engage their attention. Customization or content cre-      Sample
+ation also allow an individual to restore a threatened     Participants (N ¼ 290) were recruited from a research
+freedom (e.g., being told what to buy by an advertise-     pool at a large state university and received course
+ment) by means other than reactance (e.g., making          credit for their participation. These participants iden-
+choices or asserting freedom elsewhere within the          tified as 61.2% female and 38.1% male, ranged in age
+medium). In this way, interactive content should           from 18 to 57 (M ¼ 20.49, SD ¼ 4.15), and reported
+result in less reactance than noninteractive content.      their race/ethnicity as Caucasian/European American/
+Yet because reactance is dependent on content, it          White, n ¼ 201; Asian/Asian American, n ¼ 44; Black/
+should also be influenced by source perceptions. In        African/African American, n ¼ 31; Latino/Latina/
+this case, individuals who create content should have      Hispanic, n ¼ 12; and Pacific Islander, n ¼ 2.
+little opportunity for reactance. They are designing
+their own persuasive message, which should reduce
+negative affect and reduce counterarguing; after all, it   Procedure
+is difficult to argue with self-created content. In con-   Participants were told that they were taking part in a
+trast, opportunities for counterarguing and negative       study designed to assess their attitudes about new
+affect arise for the customizer, who first views a per-    products proposed by advertising agencies. They were
+suasive message created by another. A demanding            given a “briefing” about a product that contained
+message may immediately create reactance, which            information about the company, the product, and
+then allows the customizer to edit or continue to          three important points that the company wished to
+counterargue while engaging with the content. Even         communicate about the product (Appendix 1).
+though the customizer can change the content to            Participants were given two minutes to read and
+something more desirable—and assert freedom when           familiarize themselves with the briefing and were
+it is threatened—the initial response to a persuasive      allowed to reference the briefing during the next
+attempt may linger even after customization.               phase. After reading the briefing, participants were
+     H4: Individuals who create an advertisement will      given the first instructions unique to their randomly
+     show the lowest reactance scores, followed by         assigned condition, either creation (n ¼ 93), custom-
+     individuals who customize an advertisement and then   ization (n ¼ 102), or read only (n ¼ 95). Individuals in
+     individuals who read the advertisement.
+                                                           the read-only and customization conditions were
+                                                           yoked to participants in the creation condition such
+                                                           that advertisements that were written in the creation
+Product Liking
+                                                           condition were shown to those in the read-only and
+Reactance has also been linked with product liking; as     customization conditions. For example, User A in the
+reactance increases, product liking decreases (Hanus       creation condition would create an advertisement,
+and Fox 2017). As a result, we would hypothesize the       which would then be shown to User B in the read-
+same pattern for product liking: Customizers should        only condition and User C in the customization con-
+show the lowest levels of product liking compared to       dition. User D in the creation condition would then
+                                                                                      JOURNAL OF INTERACTIVE ADVERTISING         79
+
+
+make an ad that is shown to Users E and F in the                 Table 1. Mean scores for dependent measures.
+read-only and customization conditions. As a result,             Dependent Measure                                   M (SD)
+three participants (one in each condition) view a given          Perceived interactivity                           4.66 (.66)
+                                                                 Autonomy                                          4.28 (1.15)
+advertisement. This ensures equal exposure to stimuli            Competence                                        4.83 (1.17)
+between conditions, although not within conditions.              Attachment                                        2.80 (1.02)
+                                                                 State reactance                                   3.08 (.84)
+Variance within conditions was reduced by the com-               Source credibility                                4.81 (1.00)
+mon briefings that participants saw.                             Product liking                                    5.09 (1.31)
+                                                                 Product familiarity                               3.66 (1.69)
+                                                                 Word familiarity                                  6.56 (.63)
+Message reading. These participants were told that
+they were to read an advertisement that was created
+                                                              Table 2. Correlation matrix for dependent measures.
+to comply with the goals specified in the briefing.
+                                                              Dependent Measure             1     2     3     4      5     6
+These participants were given five minutes to read
+                                                              1. Perceived interactivity
+and evaluate the advertisement.                               2. Autonomy                 .37
+                                                              3. Competence               .26 .08
+                                                              4. Attachment               .25 .33 .18
+Message customization. These participants were told           5. State Reactance         .14 .19 .15 .06
+that they were to edit an advertisement that was pre-         6. Source Credibility       .15 .18 .18 .22 .43
+                                                              7. Product Liking           .13  .08   .19 .22 .37 .54
+viously created to comply with the goals specified in
+the briefing. These participants were given permission
+to edit anything that they wanted to change: names,           (Cronbach’s a ¼ .76); and synchronicity (Cronbach’s
+descriptions, font color, font size, spacing, and senten-     a ¼ .72). The scale was modified slightly to be relevant
+ces. They were instructed to make the edits according         to the task (e.g., “software” changed to “Microsoft
+to the goals described in the briefing in any way that        Word”). Statements included “I felt that I had control
+they chose. These participants were given 10 minutes          over my experience” and “The software processed my
+to edit the advertisement.                                    input very quickly.”
+
+Message creation. These participants were told that           Autonomy and competence. The intrinsic motivation
+they were to write an advertisement to comply with            inventory (Ryan, Koestner, and Deci 1991) features a
+the goals described in the briefing in any way that           10-item scale consisting of two distinct dimensions:
+they chose. Participants were told to write two para-         perceived competence (Cronbach’s a ¼ .92) and per-
+graphs’ worth of text and to imagine that the text            ceived autonomy (Cronbach’s a ¼ .69). Statements
+would appear in a newspaper next to a picture of the          included “I felt like I was doing what I wanted to do
+product. They were instructed to be as creative,              while I was working on the task” and “I felt that it
+inventive, or silly as they wished, keeping the goals of      was my choice to do the task.”
+the briefing in mind. These participants were given
+10 minutes to create the advertisement.                       Attachment to advertisement. The attachment in
+   After completion of these tasks, participants were         consumer behavior scale (Ball and Tasaki 1992) is a
+directed to an online survey where they completed a           nine-item scale (Cronbach’s a ¼ .85). Statements
+questionnaire that included assessments of perceived          included “If someone ridiculed the advertisement, I
+interactivity, autonomy, competence, attachment,              would feel irritated” and “If someone deleted the ad, I
+reactance, source credibility, and product liking.            would feel a little bit personally attacked.”
+
+                                                              Source credibility. Source credibility was measured on
+Measures                                                      an 18-item scale (McCroskey and Teven 1999) that
+Means and standard deviations can be found in                 features three dimensions of credibility: trustworthi-
+Table 1, with correlations for all measures in Table 2.       ness (Cronbach’s a ¼ .89); goodwill (Cronbach’s
+Unless otherwise specified, statements were answered          a ¼ .83); and competence (Cronbach’s a ¼ .89).
+on a 7-point Likert scale ranging from 1 (Strongly dis-       Participants rated the source on 7-point semantic dif-
+agree) to 7 (Strongly agree).                                 ferential items, such as Intelligent/Unintelligent,
+                                                              Informed/Uninformed, or Sensitive/Insensitive.
+Perceived interactivity. The interactivity scale (Liu 2003)
+is an 11-item scale consisting of three subscales: active     State reactance. The state reactance scale (Quick and
+control (Cronbach’s a ¼ .74); two-way communication           Stephenson 2008) is a 15-item scale (Cronbach’s
+80        M. D. HANUS
+
+
+Table 3. Main effects for content condition.
+                                                              Read         Customize        Create
+Dependent Measure         F (2, 289)    p      Partial g2     M (SD)        M (SD)          M (SD)       Hypothesis/Supported?
+Perceived interactivity      5.02       .007      .04       4.48 (.71)a    4.75 (.58)b    4.71 (.67)b    H1a/supported
+Autonomy                    40.93      <.001      .23       3.53 (1.00)a   4.83 (.95)b    4.45 (1.11)b   H1b/supported
+Competence                  16.75      <.001      .11       5.34 (.70)a    4.44 (1.26)b   4.76 (1.24)b   H1c/no evidence
+Attachment                  13.19      <.001      .09       2.41 (1.05)a   2.84 (.95)b    3.15 (.92)b    H2/partial support
+State reactance              5.84       .004      .04       3.11 (.82)ab   3.23 (.81)a    2.84 (.82)b    H3/ no evidence
+Source credibility           4.03       .014      .03       4.87( .10)ab   4.62( .10)a    5.00 (.10)b    H4/partial support
+Product liking               4.70       .013      .03       5.23 (1.35)a   4.78 (1.28)b   5.30 (1.26)a   H5/partial support
+
+
+
+a ¼ .84). Statements included “The advertisement tried          selected based on their highest combined scores on
+to manipulate me” and “I criticized the advertisement           the items “This product would appeal to college
+I just saw, while I was reading it.”                            students” and “I like this product.”1
+
+Product liking. Product liking was measured on a
+                                                                Results
+five-item scale (Cronbach’s a ¼ .91). Statements
+included “I liked the product featured in the ad” and           It was hypothesized that there would be significant
+“I would want to hear more about the product.”                  interactions between content condition and the self-
+                                                                affirmation condition. To assess the hypotheses, an
+                                                                analysis of covariance (ANCOVA) on the content
+Covariates
+                                                                condition was conducted on perceived interactivity,
+Familiarity with the product. Three statements (Cron-           autonomy, competence, attachment, reactance, source
+bach’s a ¼ .76) were measured. They included “I am              credibility, and product liking using ad familiarity and
+familiar with the [type of product] that was originally         Word familiarity as covariates (Table 3). In the event
+shown to me” and “I have heard of the [product] that            of a significant difference, post hoc t tests using
+was originally shown to me.”                                    Bonferroni correction were assessed between each
+                                                                condition mean.
+Familiarity with Microsoft Word. Four statements                   Hypotheses 1 posited that for variables centered
+(Cronbach’s a ¼ .84) were measured. They included “I            around the interactivity of the medium, customizers
+am familiar with Microsoft Word” and “I know how                and creators would show no differences but would
+to make formatting changes (e.g., changing font,                score significantly higher than those in the read-only
+changing line spacing) in Microsoft Word.”                      condition on perceived interactivity (hypothesis 1a),
+                                                                autonomy (hypothesis 1b), and competence (hypoth-
+                                                                esis 1c). Results indicate support for hypotheses 1a
+Materials
+                                                                and 1b. Results for hypothesis 1c were opposite to
+Product pretest. Ten briefings were created. Each brief-        what was predicted: For competence perceptions, indi-
+ing contained information about a fictional company,            viduals in the customization and creation conditions
+its product, and three things that the company wished           scored significantly lower on competence than those
+to communicate about the product. The products                  in the read-only condition.
+were designed to be items that would appeal to a typ-              Hypothesis 2 predicted that those in the creation
+ical college student. Participants (N ¼ 26) were asked          condition would score significantly higher scores in
+to rate each briefing on the product’s appeal to college        source credibility compared to those in the read-only
+students, how much they liked the product, whether a            condition, who would score significantly higher than
+similar product already existed, and whether they               those in the customization condition. Results indicate
+would want to write an advertisement about the prod-            partial support for hypothesis 2. Individuals in the
+uct. Participants answered each item on a 7-point               customization condition scored significantly lower
+Likert scale ranging from 1 (Strongly disagree) to 7            than those in the creation condition, where individu-
+(Strongly agree). Any item that scored over a mean              als in the read-only condition had mean scores
+score of four on “A product like this already exists”           between the other two conditions and were not sig-
+was removed. Any item that scored lower than a                  nificantly different from those in the customization or
+mean score of four on “I would want to write an                 creation conditions.
+advertisement for this product” was removed, leaving               Hypothesis 3 posited that individuals in the cre-
+six briefings in the pool. Then four briefings were             ation condition would score significantly higher on
+                                                                              JOURNAL OF INTERACTIVE ADVERTISING   81
+
+
+attachment compared to those in the customization           read-only condition. Interestingly, individuals in the
+condition, with those in the read-only condition scor-      read-only condition scored highest on competence
+ing significantly lower. Results indicate partial support   perceptions. It is possible that interactive media pre-
+for hypothesis 3; those in the read-only condition          sent greater risks and rewards regarding competence
+scored significantly lower than both customization          perceptions; those who only read the advertisement
+and creation conditions, but those two conditions           had no opportunities to demonstrate mastery of the
+were not significantly different from each other.           material, but they also had no opportunities to feel
+   Hypothesis 4 posited that those in the read-only         poorly about their efforts. Those in the customization
+condition would show the highest reactance scores           and creation conditions also did not show significant
+compared to those in the customization condition,           differences between each other on measures of attach-
+who would score higher than those in the creation           ment to the advertisement, although they both were
+condition. Results do not indicate support for hypoth-      greater than those in the read-only condition. This
+esis 4 but illustrate an interesting different trend:       finding suggests that attachment may also be a func-
+Individuals in the customization condition showed           tion of the medium and less related to content. This
+significantly higher mean reactance scores compared         is similar to the identity perception posited in the
+to those in the creation condition. Individuals in the      agency model of customization, wherein interactivity
+read-only condition fell between the two other condi-       affordances      increase    perceptions   of   identity
+tions, showing no significant difference between either     (Sundar 2008).
+customizers or creators.                                        Those in the customization condition showed sig-
+   Finally, hypothesis 5 predicted that individuals in      nificant differences in scores from those in the cre-
+the customization condition would score significantly       ation condition on measures of reactance, product
+lower on product liking than those in the read-only         liking, and source credibility scores. Individuals who
+condition, who would score significantly lower than         customized showed the most reactance, rated the
+those in the creation condition. Results indicate partial   source with the lowest amount of credibility, and liked
+support for hypothesis 5; individuals in the customiza-     the product the least. These findings illustrate how
+tion condition scored significantly lower than those in     impactful preexisting content can be to the percep-
+the read-only and creation conditions. However, there       tions of the customizer. Although this study cannot
+was no significant difference between those in the cus-     reveal the exact mechanism of these differences, it is
+tomization and read-only conditions.                        possible that one’s mental engagement with the preex-
+                                                            isting content and that content’s author are creating
+                                                            strong opinions.
+Discussion
+                                                                Individuals in the read-only condition were
+The purpose of this study was to assess the experience      expected to have the highest amount of reactance
+of the UGC creator when customizing content with            toward the advertisement, as they read a persuasive
+varying levels of branded guidance. Individuals either      message with no ostensible way to exercise their free-
+created an advertisement from scratch, customized an        dom. It was hypothesized that customizers, with their
+existing advertisement, or read an advertisement            ability to edit the existing advertisement to something
+before they were assessed on their perceptions of           more preferable, could exercise new freedom and con-
+interactivity, autonomy, competence, attachment,            trol over a potentially threatening message. The results
+reactance, source credibility, and product liking.          indicate that this was not the case. Here, engagement
+Despite the goals, instructions, and interactive inter-     with the advertisement seemed to increase reactance,
+face remaining constant between creation and custom-        perhaps because these individuals had to focus on the
+ization conditions, a number of interesting differences     message for a longer period of time. And although
+emerged that could be attributed to preexisting con-        customizers and creators both spent equal amounts of
+tent influencing perceptions of the customizer in ways      time viewing, writing, and editing the advertisement,
+more negative to the persuasive process compared to         customizers had to engage with an initially threaten-
+other conditions.                                           ing message, where creators had no such exposure.
+    On variables that assessed the program’s interface      This seems to indicate that initial content attitudes
+(i.e., medium interactivity), results were more consist-    can be magnified through the customization process;
+ent with established research: Individuals who created      a threatening message can seem more threatening
+or customized an advertisement scored higher in per-        with the scrutiny and activity that comes with custom-
+ceived interactivity and autonomy than those in the         ization. Reactance and product attitudes have been
+82     M. D. HANUS
+
+
+linked in other research (e.g., Hanus and Fox 2017),        and the message. However, content-creation cam-
+and it is possible that the high reactance scores           paigns require a significant investment of time and
+resulted in the low product liking for customizers.         effort on behalf of the user. It is possible that these
+   Finally, individuals who customized scored the low-      campaigns draw in users who are already strongly
+est in source credibility and scored significantly lower    brand loyal and further reinforce that brand loyalty.
+than content creators. This suggests that these partici-    Although the study indicates that users without brand
+pants are aware of a source and are making attribu-         familiarity felt stronger product attitudes, these users
+tions toward the source. In particular, individuals who     still participated in a controlled setting where creation
+customize a source’s work might think there is a rea-       was required for successful completion of the study. It
+son for that customization, such that the source’s          is not clear from this study that content-creation cam-
+work is lacking in a way that needs fixing. As a result,    paigns can successfully draw in new, unfamiliar users,
+the source looks worse.                                     and additional research should work to understand
+                                                            the factors that might bring new users to interactive
+                                                            advertising campaigns.
+Implications for Advertisers
+A number of successful UGC campaigns on social
+                                                            Limitations
+media have started with a call from a brand to submit
+photos, captions, or posts along a common theme that        Users in the read-only condition were given five
+echoes key brand elements. For example, women’s             minutes to read the briefing and selected advertise-
+clothing brand Aerie pledged to donate $1 to the            ment, while those in the creation and customization
+National Eating Disorders Association for every             conditions were given 10 minutes to learn the inter-
+Instagram user who posted an unedited photo of him-         face and craft the advertisement. This time difference
+self or herself in a bathing suit using the hashtag         makes it possible that individuals in the creation and
+#AerieReal. As a part of the brand’s call, Aerie            customization conditions scored higher on items such
+included unedited photos of one of its swimsuit mod-        as product attitudes simply because they were given
+els posing on a beach. While the campaign was largely       more time to engage with the product. This difference
+successful, it is possible that inclusion of the swimsuit   in times was deliberate. A previous study concerning
+model’s picture steered potential creators away from        source customization gave participants equal time to
+the campaign: The model may have represented an             customize an avatar or view a video of the avatar
+idealized body type to users, or the model’s presence       being customized (Hanus and Fox 2015). Individuals
+on a beach might imply that users should not be post-       in the customized condition scored higher on product
+ing from their home pool. In other words, inclusion         attitudes, but the authors suggested that individuals in
+of the picture provided a template or a framework           the video condition may simply have been very bored
+that might have elicited more reactance than the sub-       viewing the video for an equivalent amount of time.
+mission call alone, which would leave users more free-      Ultimately, it was determined that it would be better
+dom to submit as they wished. These results suggest         to mitigate a possible problem with boredom (by
+that there are certainly benefits to UGC campaigns          requiring participants to read a short briefing and
+and the ability to interact with and shape brand mes-       advertisement for 10 minutes) and give the groups
+sages through UGC, but it is possible that brands           separate times for completion. Future research should
+could better maximize the psychological returns on          work to equivalence in experimental conditions that
+content creators by leaving out default templates and       involve comparing interactive with noninterac-
+not giving additional structure or rules.                   tive activities.
+   From an advertising perspective, this study suggests        This study distinguishes creation and customization
+new directions for persuasive message creators and          based on the existence of preexisting content.
+additional consideration to campaigns that solicit          However, it is possible that there are different types of
+UGC. Campaigns that require users to create content         preexisting content that could shape attitudes in dif-
+from scratch may be particularly effective in reducing      ferent ways. Users in this study were required to cus-
+reactance and increasing product liking. These users        tomize finished, detailed messages created by other
+are spending time with the brand and exercising the         users, but a number of branded customization oppor-
+autonomy that they need while engaging, making the          tunities allow the user to create a new product based
+creation process a fulfilling and enjoyable process with    on simple building-block options. For example,
+significant attention and focus given to the product        Nike.com’s shoe customization system gives the users
+                                                                              JOURNAL OF INTERACTIVE ADVERTISING    83
+
+
+a number of blank shoe types, and users can custom-        also make strong predictions about technology yet to
+ize from there. Users are not starting with a previ-       be created. Interactive technology presents new chal-
+ously created shoe in full detail. It is possible that     lenges to the persuasive process; the sender–receiver
+these building blocks do not influence user percep-        model shifts to something more recursive, wherein a
+tions in the same way a finished product might.            consumer receives, interacts, assesses, interacts, and
+Future research should address the limits of source        assesses again in a continuing process. Any such
+perceptions in customization based on varying types        model outlining this process should work to measure
+of customization options, including editing final prod-    perceptions at a number of time points throughout
+ucts or using blank building blocks to assemble some-      the process and build a theoretical model that draws
+thing new.                                                 from interactive technology literature (e.g., the effects
+   Users were also given a text-only task in word          of interactive media on psychological perceptions such
+processing software, which may not be an analog to         as autonomy or competence) and persuasion literature
+real-world opportunities. This environment was             (e.g., accounting for variables such as reactance,
+chosen to give participants an interface they likely had   source credibility, personal involvement, behavioral
+familiarity with and to reduce the amount of skill         intention, group and individual differences, or mes-
+required in the customization and creation conditions      sage elaboration).
+(as opposed to a task that required users to create a
+video, for example). It also mimics the heavily text-
+                                                           Note
+based environment of some social media sites, such as
+Twitter. Still, the task might have been more realistic-    1. Analyses of variance (ANOVAs) were conducted on
+ally presented within a website frame, and future              the four selected briefings on all dependent measures.
+research should work to increase the potential realism         There were significant differences between briefings on
+of the task.                                                   source credibility, F (3, 289) ¼ 5.49, p ¼ .001, and
+   In addition, the sample was drawn from a conveni-           product liking, F (3, 289) ¼ 5.71, p ¼ .001. To
+                                                               determine the impact of different briefings on the
+ence-based student sample and is not reflective of the         content conditions, multivariate analyses of variance
+general population. Future research should look to             (MANOVAs) were conducted to assess the interaction
+examine the effects of content creation and customiza-         between company briefing and content condition.
+tion on the larger population, and in particular among         There were no significant interactions between briefing
+those who may be less familiar with technology or              and condition on perceived interactivity, autonomy,
+                                                               competence, attachment, reactance, source credibility,
+interactive media.
+                                                               or product liking (all ps > .241). As a result, for
+                                                               analyses on content condition, company briefing was
+Conclusion                                                     not included as a covariate.
+
+Customization and content creation are only two
+aspects of interactive media. This study seeks to create   References
+a better understanding of interactive media processes
+                                                           Bagnull, Todd (2016), “Lay’s Do Us A Flavor: Increasing
+through examining the effects of message customiza-          Relevance in an Ever-Changing Macro Environment,”
+tion and creation on product attitudes. Although these       Qualtrics.com, January 19, https://www.qualtrics.com/
+findings are limited to their context with advertise-        blog/lays-do-us-a-flavor-increasing-relevance-in-an-ever-
+ments, it is plausible that persuasive message designers     changing-macro-environment/.
+in many contexts could use UGC and interactive             Ball, Dwayne A., and Lori H. Tasaki (1992), “The Role and
+media to their greater benefit (e.g., health mes-            Measurement of Attachment in Consumer Behavior,”
+                                                             Journal of Consumer Psychology, 1 (2), 155–72.
+sage design).                                              Bente, Gary, Odile Baptist, and Haug Leuschner (2012), “To
+   Interactive media will only become more popular           Buy or Not to Buy: Influence of Seller Photos and
+as individuals gain increased opportunity to buy the         Reputation on Buyer Trust and Purchase Behavior,”
+software and technology that allows for interacting. It      International Journal of Human-Computer Studies, 70 (1),
+is clear that individuals have a strong demand for           1–13.
+opportunities to customize and create their experien-      Blackman, M. C., and D. C. Funder (1998). “The Effect of
+                                                             Information on Consensus and Accuracy in Personality
+ces and belongings. By working to create models that
+                                                             Judgment,” Journal of Experimental Social Psychology, 34
+can account for interactive media effects in general         (2), 164–81.
+(and UGC effects specifically), researchers can account    Brehm, Jack W. (1966), A Theory of Psychological
+for processes occurring with existing technology and         Reactance, New York: Academic Press.
+84      M. D. HANUS
+
+
+Brehm, Sharon S., and Jack W. Brehm (1981), Psychological        Krishnamurthy, Sandeep, and Wenyu Dou (2008),
+   Reactance: A Theory of Freedom and Control, vol. 26,             “Advertising with User-Generated Content: A Framework
+   New York: Academic Press.                                        and Research Agenda,” Journal of Interactive Advertising,
+Burmann, Christoph (2010), “A Call for ‘User-Generated              8 (2), 1–4.
+   Branding,’” Journal of Brand Management, 18 (1), 1–4.         Liffreing, Ilyse (2018), “Brands Are Capitalizing on the
+Chaiken, Shelly (1980), “Heuristic versus Systematic                Trend of Stressed Adults Coloring on Their Phones,”
+   Information Processing and the Use of Source versus              Digiday, January 9, https://digiday.com/marketing/adults-
+   Message Cues in Persuasion,” Journal of Personality and          coloring-brands/.
+   Social Psychology, 39 (5), 752–66.                            Liu, Yuping (2003), “Developing a Scale to Measure the
+Christodoulides, George (2009), “Branding in the Post-              Interactivity of Websites,” Journal of Advertising
+   Internet Era,” Marketing Theory, 9 (1), 141–44.                  Research, 43 (2), 207–16.
+Comscore (2012), “Comscore Study Finds Professionally-           ———, and L.J. Shrum (2002), “What Is Interactivity and Is
+   Produced Video Content and User-Generated Product                It Always Such a Good Thing? Implications of
+   Videos Exhibit Strong Synergy in Driving Sales                   Definition, Person, and Situation for the Influence
+   Effectiveness” [Press Release], March 28.                        of Interactivity on Advertising Effectiveness,” Journal of
+Daugherty, Terry, Matthew S. Eastin, and Laura Bright               Advertising, 31 (4), 53–64.
+   (2008), “Exploring Consumer Motivations for Creating          McCroskey, J. C., and J. J. Teven (1999), “Goodwill: A
+   User-Generated Content,” Journal of Interactive                  Reexamination of the Construct and its Measurement,”
+   Advertising, 8 (2), 16–25.                                       Communications Monographs, 66 (1), 90–103.
+Deci, Edward L., and Richard M. Ryan (2000), “The ‘What’         Morrison, Kimberlee (2016), “Why Consumers Share User-
+   and ‘Why’ of Goal Pursuits: Human Needs and the Self-            Generated Content (Infographic),” Adweek, May 17,
+   Determination of Behavior,” Psychological Inquiry, 11 (4),       https://www.adweek.com/digital/why-consumers-share-
+   227–68.                                                          user-generated-content-infographic/.
+Elliott, Stuart (2011), “Chobani, Greek Yogurt Leader, Lets      Muniz, Albert M., Jr., and Hope Jensen Schau (2007),
+   Its Fans Tell the Story,” New York Times, February 16,           “Vigilante      Marketing       and    Consumer-Created
+   https://www.nytimes.com/2011/02/17/business/media/               Communications,” Journal of Advertising, 36 (3), 35–50.
+   17adco.html.                                                  Niederdeppe, Jeff, James C. Hersey, Matthew C. Farrelly,
+Gottfried, Jeffrey, Michael Barthel, and Elisa Shearer (2016),      M. Lyndon Haviland, and Cheryl G. Heaton (2005),
+   “Changing a Social Media Profile Picture Is One Way to           “Comparing Adolescent Reactions to National Tobacco
+   Express Support or Solidarity,” Pew Research Center,             Countermarketing Advertisements Using Web TV,”
+   March 28, http://www.pewresearch.org/fact-tank/2016/03/          Social Marketing Quarterly, 11 (1), 3–18.
+   28/changing-a-social-media-profile-picture-is-one-way-to-     Quick, B. L., and M. T. Stephenson (2008), “Examining the
+   express-support-or-solidarity/.                                  Role of Trait Reactance and Sensation Seeking on
+Hanus, Michael D., and Jesse Fox (2015), “Persuasive                Perceived Threat, State Reactance, and Reactance
+   Avatars: The Effects of Customizing a Virtual                    Restoration,” Human Communication Research, 34 (3),
+   Salesperson’s Appearance on Brand Liking and Purchase            448–76.
+   Intentions,” International Journal of Human-Computer          Reinhart, A. M., H. M. Marshall, T. H. Feeley, and F.
+   Studies, 84, 33–40.                                              Tutzauer (2007). “The Persuasive Effects of Message
+———, and ——— (2017), “Source Customization Reduces                  Framing in Organ Donation: The Mediating Role of
+   Psychological Reactance to a Persuasive Message via User         Psychological Reactance,” Communication Monographs,
+   Control and Identity Perceptions,” Journal of Interactive        74 (2), 229–55.
+   Advertising, 17 (1), 1–12.                                    Ryan, Richard M., and Edward L. Deci (2000), “Self-
+Hu, Xiaorui, Guohua Wu, Yuhong Wu, and Han Zhang                    Determination Theory and the Facilitation of Intrinsic
+   (2010), “The Effects Of Web Assurance Seals On                   Motivation, Social Development, and Well-Being,”
+   Consumers’ Initial Trust In An Online Vendor: A                  American Psychologist, 55 (1), 68–78.
+   Functional Perspective,” Decision Support Systems, 48 (2),    ———, Richard Koestner, and Edward L. Deci (1991), “Ego-
+   407–18.                                                          Involved Persistence: When Free-Choice Behavior Is Not
+Kalyanaraman, Sriram, and S. Shyam Sundar (2006),                   Intrinsically Motivated,” Motivation and Emotion, 15 (3),
+   “The Psychological Appeal of Personalized Content in             185–205.
+   Web Portals: Does Customization Affect Attitudes              Schifferstein, Hendrik N.J., and Elly P.H. Zwartkruis-
+   and Behavior?,” Journal of Communication, 56 (1),                Pelgrim (2008),        “Consumer–Product      Attachment:
+   110–32.                                                          Measurement and Design Implications,” International
+Kang, Hyunjin, and S. Shyam Sundar (2016), “When Self Is            Journal of Design, 2 (3), 1–13.
+   the Source: Effects of Media Customization on Message         Schmierbach, Mike, Anthony M. Limperos, and Julia K.
+   Processing,” Media Psychology, 19 (4), 561–88.                   Woolley (2012), “Feeling the Need for (Personalized)
+Klimmt, Christoph, Tilo Hartmann, and Andreas Frey                  Speed: How Natural Controls and Customization
+   (2007), “Effectance and Control As Determinants of               Contribute to Enjoyment of a Racing Game through
+   Video Game Enjoyment,” Cyberpsychol Behav, 10 (6),               Enhanced Immersion,” Cyberpsychology, Behavior, and
+   845–847.                                                         Social Networking, 15 (7), 364–69.
+                                                                                    JOURNAL OF INTERACTIVE ADVERTISING     85
+
+
+Song, J.H., and G.M. Zinkhan (2008), “Determinants of            Tamborini, Ron, Nicholas David Bowman, Allison Eden,
+   Perceived Web Site Interactivity,” Journal of Marketing,        Matthew Grizzard, and Ashley Organ (2010), “Defining
+   72 (2), 99–113.                                                 Media Enjoyment As the Satisfaction of Intrinsic Needs,”
+Sternthal, Brian, Ruby Dholakia, and Clark Leavitt (1978),         Journal of Communication, 60 (4), 758–77.
+   “The Persuasive Effect of Source Credibility: Tests of        Teng, Ching-I (2010), “Customization, Immersion
+   Cognitive Response,” Journal of Consumer Research,              Satisfaction, and Online Gamer Loyalty,” Computers in
+   4 (4), 252–60.                                                  Human Behavior, 26 (6), 1547–54.
+Sundar, S. Shyam (2008), “The MAIN Model: A Heuristic            Vazire, Simine, and Samuel D. Gosling (2004),
+   Approach to Understanding Technology Effects on                 “E-Perceptions: Personality Impressions Based on
+   Credibility,” in Digital Media, Youth, and Credibility,         Personal Websites,” Journal of Personality and Social
+   Miriam J. Metzger and Andrew J. Flanagin, eds.,                 Psychology, 87 (1), 123–32.
+   Cambridge, MA: The MIT Press, 73–100.                         Wilson, Elizabeth J., and Daniel L. Sherrell (1993), “Source
+———, Haiyan Jia, T. Franklin Waddell, and Yan Huang                Effects in Communication and Persuasion Research: A
+   (2015), “Toward a Theory of Interactive Media Effects           Meta-Analysis of Effect Size,” Journal of the Academy of
+   (TIME),” in The Handbook of the Psychology of                   Marketing Science, 21 (2), 101–12.
+   Communication Technology, S. Shyam Sundar, ed.,
+   Chichester, United Kingdom: Wiley, 47–86.
+
+
+
+
+Appendix 1: Sample Company Briefing
+About the Company
+We specialize in household electronics that can be used by
+everyone and are fun to use. A new patent in rotor technol-
+ogy and the use of an internal computer allows us to make
+a fan that will adjust to best accommodate your home.
+
+Things to Communicate
+ The new fan is small, efficient, and affordable.
+ One fan is enough to cool the entire house.
+ The fan uses new, cutting-edge technology.
+
+
+Product
+Cyclone fan: This small, powerful fan can be placed in one
+room and will efficiently circulate air throughout the house.
+It’s the only fan you’ll ever need to buy. Place it by an open
+window or an air-conditioning duct for extra cooling.
