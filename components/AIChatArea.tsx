@@ -17,7 +17,7 @@ export interface Message {
 interface AIChatAreaProps {
   messages: Message[];
   onConfirm: (messageId: string, parsed: ParsedTransaction) => void;
-  onEdit: (parsed: ParsedTransaction) => void;
+  onEdit: (parsed: ParsedTransaction, messageId: string) => void;
   processingMessageId?: string | null;
 }
 
@@ -87,7 +87,7 @@ export const AIChatArea: React.FC<AIChatAreaProps> = ({ messages, onConfirm, onE
                   data={msg.parsedData}
                   editedData={msg.editedData}
                   onConfirm={() => onConfirm(msg.id, msg.editedData || msg.parsedData!)}
-                  onEdit={!msg.confirmed ? () => onEdit(msg.editedData || msg.parsedData!) : undefined}
+                  onEdit={!msg.confirmed ? () => onEdit(msg.editedData || msg.parsedData!, msg.id) : undefined}
                   confirmed={msg.confirmed}
                   isProcessing={processingMessageId === msg.id}
                 />

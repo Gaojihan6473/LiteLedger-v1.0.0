@@ -26,6 +26,8 @@ export const AIPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   // 正在确认记账的消息 ID
   const [processingMessageId, setProcessingMessageId] = useState<string | null>(null);
+  // 当前编辑的消息 ID
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   // 当前编辑的 ParsedTransaction
   const [editingTransaction, setEditingTransaction] = useState<ParsedTransaction | null>(null);
 
@@ -365,21 +367,23 @@ export const AIPage: React.FC = () => {
   }, [navigate]);
 
   // 处理编辑
-  const handleEdit = useCallback((parsed: ParsedTransaction) => {
+  const handleEdit = useCallback((parsed: ParsedTransaction, messageId: string) => {
+    setEditingMessageId(messageId);
     setEditingTransaction(parsed);
   }, []);
 
   // 处理编辑完成
   const handleEditConfirm = useCallback((edited: ParsedTransaction) => {
-    if (!editingTransaction) return;
+    if (!editingMessageId) return;
     // 更新消息中的 editedData
     setMessages(prev => prev.map(m =>
-      m.type === 'transaction' && m.parsedData === editingTransaction
+      m.id === editingMessageId
         ? { ...m, editedData: edited }
         : m
     ));
+    setEditingMessageId(null);
     setEditingTransaction(null);
-  }, [editingTransaction]);
+  }, [editingMessageId]);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-slate-100 flex flex-col">
